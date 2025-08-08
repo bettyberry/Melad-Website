@@ -206,15 +206,7 @@ export default function ServicesPage() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
 
         <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium"
-          >
-            <Sparkles className="h-4 w-4 mr-2" />
-            <span>{language === "en" ? "Professional Services" : "ሙያዊ አገልግሎቶች"}</span>
-          </motion.div>
+      
 
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -242,12 +234,15 @@ export default function ServicesPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 mt-8"
           >
-            <Button className="h-12 px-8 bg-white text-primary hover:bg-white/90 rounded-full text-base shadow-lg">
-              {language === "en" ? "View Our Services" : "አገልግሎቶቻችንን ይመልከቱ"}
+           <Button
+              variant="outline"
+              className="h-12 px-8  bg-white text-primary hover:bg-white/10 rounded-full text-base"
+            >              {language === "en" ? "View Our Services" : "አገልግሎቶቻችንን ይመልከቱ"}
             </Button>
+
             <Button
               variant="outline"
-              className="h-12 px-8 border-white/30 text-white hover:bg-white/10 rounded-full text-base"
+              className="h-12 px-8  bg-white text-primary hover:bg-white/10 rounded-full text-base"
             >
               {language === "en" ? "Get Quote" : "ዋጋ ይጠይቁ"}
             </Button>
@@ -408,16 +403,7 @@ export default function ServicesPage() {
       <section className="py-16 md:py-24 bg-slate-50">
         <div className="container px-4 md:px-6">
           <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-4"
-            >
-              <Target className="h-4 w-4 mr-2" />
-              <span>{language === "en" ? "Our Process" : "የሥራ ሂደታችን"}</span>
-            </motion.div>
+            
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -594,13 +580,18 @@ export default function ServicesPage() {
                 : "ስለ ብራና ፍላጎትዎ ለመወያየት እና ለፕሮጀክትዎ ልዩ ዋጋ ለማግኘት ዛሬ ያግኙን።"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="h-12 px-8 bg-white text-primary hover:bg-white/90 rounded-full text-base">
+
+              <Button
+              variant="outline"
+              className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base">
                 <Phone className="mr-2 h-4 w-4" />
                 {language === "en" ? "Call Us Now" : "አሁን ይደውሉ"}
               </Button>
+
+
               <Button
                 variant="outline"
-                className="h-12 px-8 border-white/30 text-white hover:bg-white/10 rounded-full text-base"
+                className="h-12 px-8 border-white/30  text-primary hover:bg-white/10 rounded-full text-base"
               >
                 <Mail className="mr-2 h-4 w-4" />
                 {language === "en" ? "Send Message" : "መልዕክት ይላኩ"}

@@ -236,15 +236,7 @@ export default function ProductsPage() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
 
         <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium"
-          >
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            <span>{language === "en" ? "Premium Products" : "ከፍተኛ ጥራት ምርቶች"}</span>
-          </motion.div>
+        
 
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -272,12 +264,14 @@ export default function ProductsPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 mt-8"
           >
-            <Button className="h-12 px-8 bg-white text-primary hover:bg-white/90 rounded-full text-base shadow-lg">
+            <Button
+             variant="outline"
+             className="h-12 px-8 bg-white text-primary  hover:bg-white/10 rounded-full text-base shadow-lg">
               {language === "en" ? "Shop Now" : "አሁን ይግዙ"}
             </Button>
             <Button
               variant="outline"
-              className="h-12 px-8 border-white/30 text-white hover:bg-white/10 rounded-full text-base"
+              className="h-12 px-8 border-white/30  text-primary  hover:bg-white/10 rounded-full text-base"
             >
               {language === "en" ? "View Catalog" : "ካታሎግ ይመልከቱ"}
             </Button>
@@ -819,7 +813,7 @@ export default function ProductsPage() {
                     {Object.entries(selectedProduct.specifications).map(([key, value]) => (
                       <div key={key} className="flex justify-between">
                         <span className="text-slate-500 capitalize">{key}:</span>
-                        <span className="text-slate-900">{value}</span>
+                        <span className="text-slate-900">{String(value)}</span>
                       </div>
                     ))}
                   </div>

@@ -22,7 +22,7 @@ export default function Header() {
     setIsMounted(true)
 
     const handleScroll = () => {
-      if (window.scrollY > 20) {
+      if (window.scrollY > 10) { // Reduced scroll threshold
         setScrolled(true)
       } else {
         setScrolled(false)
@@ -71,30 +71,40 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur-md shadow-lg py-2 sm:py-3" : "bg-white/90 backdrop-blur-sm py-3 sm:py-4"
+        scrolled ? "bg-white/95 backdrop-blur-md shadow-sm py-1" : "bg-white/95 backdrop-blur-sm py-2"
       }`}
     >
       <div className="container flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-3 z-10">
-          <div className="relative h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14">
-            <Image src="/images/brana-logo.png" alt="ሜላድ ብራና Logo" fill className="object-contain" />
+        {/* Logo remains original size */}
+        <Link href="/" className="flex items-center space-x-2 z-10">
+          <div className="relative h-10 w-10"> {/* Keep original logo size */}
+            <Image
+              src="/images/brana-logo.png"
+              alt="ሜላድ ብራና Logo"
+              fill
+              className="object-contain"
+            />
           </div>
-          <div className="hidden sm:block">
-            <span className="block text-lg sm:text-xl font-bold text-primary">ሜላድ ጥንታዊ የብራና ጽሑፍ ማእከል  </span>
-            <span className="block text-xs sm:text-sm text-gray-600">Melad Ancient Parchment Books</span>
+          <div className="hidden sm:block leading-tight">
+            <span className="block text-sm font-medium text-primary">
+              ሜላድ ጥንታዊ የብራና ጽሑፍ ማእከል
+            </span>
+            <span className="block text-xs text-gray-600">
+              Melad Ancient Parchment Books
+            </span>
           </div>
         </Link>
 
-        <div className="flex items-center space-x-2">
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+        <div className="flex items-center space-x-1">
+          {/* Desktop Navigation - Made more compact */}
+          <nav className="hidden md:flex items-center space-x-5">
             {menuItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
               return (
                 <Link
                   key={item.key}
                   href={item.href}
-                  className={`px-4 py-2 text-sm font-medium rounded-full transition-colors duration-300 ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${
                     isActive ? "bg-primary/10 text-primary" : "text-gray-700 hover:bg-gray-100 hover:text-primary"
                   }`}
                 >
@@ -103,7 +113,7 @@ export default function Header() {
               )
             })}
 
-            <div className="relative ml-2">
+            <div className="relative ml-1">
               <Button
                 variant="ghost"
                 size="sm"
@@ -111,23 +121,25 @@ export default function Header() {
                   e.stopPropagation()
                   setLanguageMenuOpen(!languageMenuOpen)
                 }}
-                className="text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-primary rounded-full flex items-center space-x-1"
+                className="text-xs font-medium text-gray-700 hover:bg-gray-100 hover:text-primary rounded-md px-2.5 py-1.5"
               >
-                <Globe className="h-4 w-4 mr-1" />
+                <Globe className="h-3.5 w-3.5 mr-1" />
                 <span>{language === "en" ? "EN" : "አማ"}</span>
                 <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-300 ${languageMenuOpen ? "rotate-180" : ""}`}
+                  className={`h-3.5 w-3.5 ml-0.5 transition-transform duration-200 ${
+                    languageMenuOpen ? "rotate-180" : ""
+                  }`}
                 />
               </Button>
 
               <AnimatePresence>
                 {languageMenuOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-40 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden z-50"
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-1 w-36 rounded-lg bg-white shadow-md ring-1 ring-black ring-opacity-5 overflow-hidden z-50"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="py-1">
@@ -136,12 +148,12 @@ export default function Header() {
                           setLanguage("en")
                           setLanguageMenuOpen(false)
                         }}
-                        className={`flex items-center w-full px-4 py-2 text-sm ${
+                        className={`flex items-center w-full px-3 py-1.5 text-xs ${
                           language === "en" ? "bg-gray-100 text-primary" : "text-gray-700 hover:bg-gray-50"
                         }`}
                       >
-                        <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center mr-2">
-                          {language === "en" && <Check className="h-3 w-3 text-primary" />}
+                        <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center mr-2">
+                          {language === "en" && <Check className="h-2.5 w-2.5 text-primary" />}
                         </span>
                         English
                       </button>
@@ -150,12 +162,12 @@ export default function Header() {
                           setLanguage("am")
                           setLanguageMenuOpen(false)
                         }}
-                        className={`flex items-center w-full px-4 py-2 text-sm ${
+                        className={`flex items-center w-full px-3 py-1.5 text-xs ${
                           language === "am" ? "bg-gray-100 text-primary" : "text-gray-700 hover:bg-gray-50"
                         }`}
                       >
-                        <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center mr-2">
-                          {language === "am" && <Check className="h-3 w-3 text-primary" />}
+                        <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center mr-2">
+                          {language === "am" && <Check className="h-2.5 w-2.5 text-primary" />}
                         </span>
                         አማርኛ
                       </button>
@@ -165,55 +177,59 @@ export default function Header() {
               </AnimatePresence>
             </div>
 
-            <Button className="ml-2 bg-primary hover:bg-primary/90 text-white rounded-full shadow-md">
-              {t("contactUs")}
-            </Button>
+            
           </nav>
 
-          <Button variant="ghost" size="icon" className="hidden md:flex rounded-full hover:bg-gray-100">
-            <Search className="h-5 w-5 text-gray-700" />
-          </Button>
 
-          {/* Mobile Navigation */}
-          <div className="flex items-center space-x-2 md:hidden">
-            <Button variant="ghost" size="icon" className="rounded-full hover:bg-gray-100">
-              <Search className="h-5 w-5 text-gray-700" />
+
+          {/* Mobile Navigation - Made more compact */}
+          <div className="flex items-center space-x-1 md:hidden">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="rounded-md hover:bg-gray-100 px-2 py-1.5"
+            >
+              <Search className="h-4 w-4 text-gray-700" />
             </Button>
 
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full hover:bg-gray-100">
-                  <Menu className="h-5 w-5 text-gray-700" />
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="rounded-md hover:bg-gray-100 px-2 py-1.5"
+                >
+                  <Menu className="h-4 w-4 text-gray-700" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:w-80 border-none">
+              <SheetContent side="right" className="w-full sm:w-72 border-none">
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center justify-between mb-6">
                     <Link href="/" className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
-                      <div className="relative h-10 w-10">
+                      <div className="relative h-10 w-10"> {/* Keep original logo size in mobile */}
                         <Image src="/images/brana-logo.png" alt="ሜላድ ብራና Logo" fill className="object-contain" />
                       </div>
-                      <span className="text-lg font-bold text-primary">ሜላድ ጥንታዊ የብራና ጽሑፍ ማእከል  </span>
+                      <span className="text-sm font-semibold text-primary">ሜላድ ጥንታዊ የብራና ጽሑፍ ማእከል</span>
                     </Link>
                     <Button
                       variant="ghost"
-                      size="icon"
+                      size="sm"
                       onClick={() => setIsOpen(false)}
-                      className="rounded-full hover:bg-gray-100"
+                      className="rounded-md hover:bg-gray-100 px-2 py-1.5"
                     >
-                      <X className="h-5 w-5 text-gray-700" />
+                      <X className="h-4 w-4 text-gray-700" />
                     </Button>
                   </div>
 
-                  <div className="flex flex-col space-y-1 mt-4">
+                  <div className="flex flex-col space-y-0.5 mt-2">
                     {menuItems.map((item) => {
                       const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
                       return (
                         <Link
                           key={item.key}
                           href={item.href}
-                          className={`px-4 py-3 text-base font-medium rounded-xl transition-colors duration-300 ${
+                          className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
                             isActive
                               ? "bg-primary/10 text-primary"
                               : "text-gray-700 hover:bg-gray-100 hover:text-primary"
@@ -226,19 +242,19 @@ export default function Header() {
                     })}
                   </div>
 
-                  <div className="mt-8 flex flex-col space-y-4">
+                  <div className="mt-6 flex flex-col space-y-2">
                     <Button
                       variant="outline"
                       onClick={() => {
                         setLanguage(language === "en" ? "am" : "en")
                       }}
-                      className="w-full justify-center rounded-xl border-gray-200 text-gray-700"
+                      className="w-full justify-center rounded-lg border-gray-200 text-gray-700 text-sm py-1.5"
                     >
-                      <Globe className="h-4 w-4 mr-2" />
+                      <Globe className="h-3.5 w-3.5 mr-2" />
                       {language === "en" ? "አማርኛ" : "English"}
                     </Button>
 
-                    <Button className="w-full justify-center rounded-xl bg-primary hover:bg-primary/90 text-white">
+                    <Button className="w-full justify-center rounded-lg bg-primary hover:bg-primary/90 text-white text-sm py-1.5">
                       {t("contactUs")}
                     </Button>
                   </div>
@@ -252,7 +268,7 @@ export default function Header() {
   )
 }
 
-function Check(props) {
+function Check(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

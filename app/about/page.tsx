@@ -58,15 +58,7 @@ export default function AboutPage() {
         </div>
 
         <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-8 text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium"
-          >
-            <Calendar className="h-4 w-4 mr-2" />
-            <span>{language === "en" ? "Established June 24, 2015" : "የተመሰረተው 2015 ሰኔ 24 ቀን ነው"}</span>
-          </motion.div>
+          
 
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -97,10 +89,8 @@ export default function AboutPage() {
             <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-lg text-base py-6 px-8 h-auto">
               {language === "en" ? "Our Story" : "ታሪካችን"}
             </Button>
-            <Button
-              variant="outline"
-              className="rounded-full border-white text-white hover:bg-white/10 text-base py-6 px-8 h-auto"
-            >
+                        <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-lg text-base py-6 px-8 h-auto">
+
               {language === "en" ? "Meet Our Team" : "ቡድናችንን ያግኙ"}
             </Button>
           </motion.div>
@@ -119,10 +109,10 @@ export default function AboutPage() {
       </section>
 
       {/* Name Origin Section */}
-      <section className="py-20 relative overflow-hidden">
+      <section className="py-2  ml-6 relative overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
+        <div className="absolute top-0 right-0 w-72 h-72 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-secondary/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
 
         <div className="container px-4 md:px-6 relative">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
@@ -197,7 +187,7 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="absolute -bottom-8 -left-8 h-36 w-36 rounded-2xl overflow-hidden border-4 border-white shadow-xl animate-float"
+                className="absolute -bottom-8 -left-8 h-32 w-32 rounded-2xl overflow-hidden border-4 border-white shadow-xl animate-float"
               >
                 <Image src="/images/manuscript-text.png" alt="Manuscript Text Detail" fill className="object-cover" />
               </motion.div>

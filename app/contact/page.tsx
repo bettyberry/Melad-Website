@@ -193,7 +193,7 @@ export default function ContactPage() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
 
-        <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
+        <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4 ">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
