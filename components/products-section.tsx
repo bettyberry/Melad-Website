@@ -21,8 +21,10 @@ export default function ProductsSection() {
           : "በባህላዊ ቴክኒኮች የተሰሩ እውነተኛ የኢትዮጵያ ብራናዎች፣ ሃይማኖታዊ ጽሑፎችን፣ ጸሎቶችን እና ታሪካዊ ሥራዎችን ያካትታሉ።",
       image: "/images/manuscript-book1.png",
       badge: language === "en" ? "Most Popular" : "በጣም ተወዳጅ",
-      icon: <Star className="h-4 w-4" />,
+      icon: <Star className="h-4 w-4" />, 
     },
+    
+    
     {
       title: language === "en" ? "Sacred Artwork" : "ቅዱስ ስዕል",
       description:

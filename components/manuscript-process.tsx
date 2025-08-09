@@ -84,58 +84,68 @@ export default function ManuscriptProcess() {
               : "ባህላዊ የኢትዮጵያ ብራና መፍጠር ከትውልድ ወደ ትውልድ የተላለፈ ጥልቅ ጥበብ ይጠይቃል።"}
           </motion.p>
         </div>
-
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="order-2 md:order-1">
-            <div className="grid grid-cols-1 gap-6">
-              {processSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="flex items-start space-x-4 bg-white p-6 rounded-xl shadow-md"
-                >
-                  <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary">
-                    {step.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-3">{step.title}</h3>
-                    <p className="text-slate-600">{step.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+<div className="grid md:grid-cols-2 gap-6 items-center">
+  <div className="order-2 md:order-1">
+    <div className="grid grid-cols-1 gap-3.5">
+      {processSteps.map((step, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, x: -10 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: index * 0.1 }}
+          className="flex items-start space-x-3.5 bg-white p-4 rounded-md shadow-xs hover:shadow-sm transition-all border border-gray-100"
+        >
+          <div className="flex-shrink-0 flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 text-primary text-[15px]">
+            {step.icon}
           </div>
+          <div>
+            <h3 className="text-[16px] font-medium text-gray-800 mb-1.5 leading-tight">{step.title}</h3>
+            <p className="text-[15px] text-gray-600 leading-snug">{step.description}</p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="relative order-1 md:order-2"
-          >
-            <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl">
-              <Image
-                src="/images/manuscript-page.png"
-                alt="Manuscript Creation Process"
-                fill
-                className="object-cover"
-              />
-            </div>
+  <motion.div
+    initial={{ opacity: 0, scale: 0.98 }}
+    whileInView={{ opacity: 1, scale: 1 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6 }}
+    className="relative order-1 md:order-2 w-full max-w-[320px] mx-auto"
+  >
+    {/* Main Image - Ensure this path is correct */}
+    <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-sm border border-gray-200 bg-gray-100">
+      <Image
+        src="/images/manuscript-page.png" 
+        alt="Manuscript Creation Process"
+        width={390}
+        height={426}
+        className="object-cover object-center w-full h-full"
+        priority
+      />
+    </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="absolute -bottom-6 -right-6 h-32 w-32 rounded-xl overflow-hidden border-4 border-white shadow-xl animate-float"
-            >
-              <Image src="/images/manuscript-book2.png" alt="Finished Manuscript" fill className="object-cover" />
-            </motion.div>
-          </motion.div>
-        </div>
+    {/* Floating Image */}
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="absolute -bottom-4 -right-4 h-20 w-20 rounded-md overflow-hidden border-2 border-white shadow-md animate-float"
+    >
+      <Image 
+        src="/images/manuscript-book2.png" // Changed to .jpg extension
+        alt="Finished Manuscript" 
+        width={80}
+        height={80}
+        className="object-cover object-center"
+        priority
+      />
+    </motion.div>
+  </motion.div>
+</div>
       </div>
     </section>
   )

@@ -112,7 +112,7 @@ export default function AboutPage() {
       <section className="py-2  ml-6 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-72 h-72 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-secondary/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-72 h- bg-secondary/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
 
         <div className="container px-4 md:px-6 relative">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
@@ -173,7 +173,7 @@ export default function AboutPage() {
               transition={{ duration: 0.8 }}
               className="relative"
             >
-              <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl image-shine">
+              <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl image-shine ml-7">
                 <Image
                   src="/images/manuscript-book1.png"
                   alt="Ancient Ethiopian Manuscript"
