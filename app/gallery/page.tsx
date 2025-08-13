@@ -385,7 +385,7 @@ export default function GalleryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
         <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
@@ -479,7 +479,7 @@ export default function GalleryPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative flex-shrink-0 w-[320px] md:w-[400px] snap-start group"
+                  className="relative flex-shrink-0 w-[320px] md:w-[290px] snap-start group"
                 >
                   <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:-translate-y-2">
                     <div
@@ -972,11 +972,8 @@ export default function GalleryPage() {
       <section className="py-16 md:py-24 bg-white">
         <div className="container px-4 md:px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-6">
-                <Info className="h-4 w-4 mr-2" />
-                <span>{language === "en" ? "About Our Collection" : "ስለ ስብስባችን"}</span>
-              </div>
+            <div className="ml-7">
+              
 
               <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-6">
                 {language === "en" ? "Preserving Ethiopia's Manuscript Heritage" : "የኢትዮጵያን የብራና ቅርስ መጠበቅ"}
@@ -1018,7 +1015,7 @@ export default function GalleryPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="absolute -bottom-6 -left-6 h-32 w-32 rounded-xl overflow-hidden border-4 border-white shadow-xl animate-float hidden sm:block"
+                className="absolute -bottom-6 -left-6 h-24 w-24 rounded-xl overflow-hidden border-4 border-white shadow-xl animate-float hidden sm:block"
               >
                 <Image src="/images/manuscript-text.png" alt="Manuscript Detail" fill className="object-cover" />
               </motion.div>
@@ -1029,7 +1026,7 @@ export default function GalleryPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="absolute -top-6 -right-6 bg-white rounded-xl p-4 shadow-lg hidden md:block"
+                className="absolute -top-6 -right-6 bg-white rounded-xl p-2  shadow-lg hidden md:block"
               >
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">{galleryItems.length}+</div>
@@ -1058,12 +1055,15 @@ export default function GalleryPage() {
                 : "እነዚህን ድንቅ ብራናዎች በአካል ለማየት እና ስለ ጥበቃ ቴክኒኮቻችን ለመማር ማዕከላችንን ይጎብኙ።"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="h-12 px-8 bg-white text-primary hover:bg-white/90 rounded-full text-base">
+              <Button 
+              variant="outline"
+
+              className="h-12 px-8 border-white/30 text-primary hover:bg-white/10  rounded-full text-base">
                 {language === "en" ? "Visit Our Center" : "ማዕከላችንን ይጎብኙ"}
               </Button>
               <Button
                 variant="outline"
-                className="h-12 px-8 border-white/30 text-white hover:bg-white/10 rounded-full text-base"
+                className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
               >
                 {language === "en" ? "Download Catalog" : "ካታሎግ ያውርዱ"}
               </Button>

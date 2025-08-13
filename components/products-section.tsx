@@ -32,7 +32,6 @@ export default function ProductsSection() {
           ? "Traditional Ethiopian Orthodox icons and religious illustrations hand-painted on parchment using natural pigments."
           : "ባህላዊ የኢትዮጵያ ኦርቶዶክስ ምስሎች እና ሃይማኖታዊ ስዕሎች በተፈጥሯዊ ቀለሞች በብራና ላይ በእጅ ተሳሉ።",
       image: "/images/manuscript-madonna.png",
-      badge: language === "en" ? "Premium Quality" : "ከፍተኛ ጥራት",
       icon: <Award className="h-4 w-4" />,
     },
     {
@@ -42,7 +41,7 @@ export default function ProductsSection() {
           ? "Intricate Ethiopian knotwork patterns and decorative borders created with traditional techniques for manuscripts and art pieces."
           : "በብራናዎች እና በጥበብ ሥራዎች ላይ በባህላዊ ቴክኒኮች የተሰሩ ውስብስብ የኢትዮጵያ ሐረግ ንድፎች እና ጌጣጌጥ ድንበሮች።",
       image: "/images/manuscript-page.png",
-      badge: language === "en" ? "Handcrafted" : "በእጅ የተሰራ",
+      badge: language === "en" ? "" : "በእጅ የተሰራ",
       icon: <Clock className="h-4 w-4" />,
     },
     {
@@ -141,10 +140,7 @@ export default function ProductsSection() {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       {/* Badge */}
-                      <div className="absolute top-4 left-4 inline-flex items-center px-3 py-1 rounded-full bg-primary/90 text-white text-xs font-medium">
-                        {product.icon}
-                        <span className="ml-1">{product.badge}</span>
-                      </div>
+                      
                     </div>
                     <CardHeader className="flex-grow">
                       <CardTitle className="text-gray-900 text-lg">{product.title}</CardTitle>

@@ -51,17 +51,7 @@ export default function ManuscriptProcess() {
 
       <div className="container px-4 md:px-6 relative">
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-4"
-          >
-            <History className="h-4 w-4 mr-2" />
-            <span>{language === "en" ? "Traditional Process" : "ባህላዊ ሂደት"}</span>
-          </motion.div>
-
+         
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -105,23 +105,7 @@ export default function AboutSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
               {/* Overlay Badge */}
-              <div className="absolute bottom-4 left-4 right-4">
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/20">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-                      <History className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold text-sm">
-                        {language === "en" ? "Traditional Binding" : "ባህላዊ አሰራር"}
-                      </div>
-                      <div className="text-gray-300 text-xs">
-                        {language === "en" ? "Centuries-old techniques" : "ዘመናት የዳበረ ቴክኒክ"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+             
             </div>
 
             {/* Floating Element */}

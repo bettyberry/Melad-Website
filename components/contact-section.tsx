@@ -16,10 +16,7 @@ export default function ContactSection() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t("contact")}</h2>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              {/* Placeholder content - will be replaced with actual content */}
-              Get in touch with us. We'd love to hear from you.
-            </p>
+            
           </div>
           <div className="grid w-full max-w-5xl gap-6 md:grid-cols-2">
             <Card>
@@ -55,8 +52,7 @@ export default function ContactSection() {
                   <div className="space-y-1">
                     <p className="text-sm font-medium leading-none">Address</p>
                     <p className="text-sm text-muted-foreground">
-                      {/* Placeholder content - will be replaced with actual content */}
-                      123 Main Street, City, Country
+                      yeka , Addis Ababa, Ethiopia
                     </p>
                   </div>
                 </div>
@@ -65,8 +61,7 @@ export default function ContactSection() {
                   <div className="space-y-1">
                     <p className="text-sm font-medium leading-none">Phone</p>
                     <p className="text-sm text-muted-foreground">
-                      {/* Placeholder content - will be replaced with actual content */}
-                      +123 456 7890
+                      0911234578
                     </p>
                   </div>
                 </div>

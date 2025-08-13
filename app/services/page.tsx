@@ -198,7 +198,7 @@ export default function ServicesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
       {/* Hero Section */}
       <section className="relative h-[70vh] min-h-[600px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
         <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
@@ -251,153 +251,133 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-16 md:py-24">
-        <div className="container px-4 md:px-6">
-          <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-4"
-            >
-              <Award className="h-4 w-4 mr-2" />
-              <span>{language === "en" ? "Our Expertise" : "ብቃታችን"}</span>
-            </motion.div>
+     <section className="py-12 md:py-20 ml-10">
+  <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+    <div className="text-center mb-12 md:mb-16 max-w-3xl mx-auto">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl mb-3"
+      >
+        {language === "en" ? "Comprehensive Manuscript Services" : "ሰፊ የብራና አገልግሎቶች"}
+      </motion.h2>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-4"
-            >
-              {language === "en" ? "Comprehensive Manuscript Services" : "ሰፊ የብራና አገልግሎቶች"}
-            </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mt-3 text-slate-600 md:text-lg leading-relaxed"
+      >
+        {language === "en"
+          ? "From creation to restoration, we offer complete manuscript services that honor Ethiopian traditions while meeting modern standards."
+          : "ከፍጠራ እስከ እድሳት፣ የኢትዮጵያ ባህሎችን በማክበር ዘመናዊ ደረጃዎችን የሚያሟሉ ሙሉ የብራና አገልግሎቶችን እንሰጣለን።"}
+      </motion.p>
+    </div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-4 text-slate-600 md:text-lg max-w-3xl mx-auto"
-            >
-              {language === "en"
-                ? "From creation to restoration, we offer complete manuscript services that honor Ethiopian traditions while meeting modern standards."
-                : "ከፍጠራ እስከ እድሳት፣ የኢትዮጵያ ባህሎችን በማክበር ዘመናዊ ደረጃዎችን የሚያሟሉ ሙሉ የብራና አገልግሎቶችን እንሰጣለን።"}
-            </motion.p>
-          </div>
+    <Tabs defaultValue="manuscript-creation" className="w-full">
+      <div className="flex justify-center mb-10">
+<TabsList
+  className="
+    inline-flex p-1 rounded-full shadow-md border bg-white
+    space-x-1
+  "
+>
 
-          <Tabs defaultValue="manuscript-creation" className="w-full">
-            <div className="flex justify-center mb-12">
-              <TabsList className="bg-white p-1.5 rounded-full shadow-lg border">
-                {services.map((service, index) => (
-                  <TabsTrigger
-                    key={service.id}
-                    value={service.id}
-                    className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-3 text-sm font-medium"
-                    onClick={() => setActiveService(index)}
-                  >
-                    <span className="hidden sm:inline">{service.title}</span>
-                    <span className="sm:hidden">{service.icon}</span>
-                  </TabsTrigger>
+          {services.map((service, index) => (
+            <TabsTrigger
+              key={service.id}
+              value={service.id}
+              className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-white px-5 py-2 text-xs sm:text-sm font-semibold"
+              onClick={() => setActiveService(index)}
+            >
+              <span className="hidden sm:inline">{service.title}</span>
+              <span className="sm:hidden">{service.icon}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </div>
+
+      {services.map((service, index) => (
+        <TabsContent key={service.id} value={service.id} className="mt-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="grid lg:grid-cols-2 gap-10 items-center"
+          >
+            <div className="space-y-5 max-w-xl mx-auto lg:mx-0">
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/20 text-primary text-xl">
+                  {service.icon}
+                </div>
+                <div>
+                  
+                  <h3 className="text-2xl font-bold text-slate-900 leading-tight">{service.title}</h3>
+                  <p className="text-slate-600 text-sm">{service.subtitle}</p>
+                </div>
+              </div>
+
+              <p className="text-slate-600 text-base leading-relaxed">{service.description}</p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {service.features.map((feature, idx) => (
+                  <div key={idx} className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-primary" />
+                    <span className="text-slate-600 text-sm">{feature}</span>
+                  </div>
                 ))}
-              </TabsList>
+              </div>
+
+              <div className="flex items-center space-x-6 pt-4 text-sm text-slate-600">
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-5 w-5" />
+                  <span>{service.duration}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Star className="h-5 w-5" />
+                  <span>{service.price}</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 pt-5">
+                <Button className="bg-primary hover:bg-primary/90 text-white rounded-full py-2 px-6 text-sm font-semibold flex items-center justify-center">
+                  {language === "en" ? "Get Started" : "ይጀምሩ"}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button variant="outline" className="rounded-full py-2 px-6 text-sm font-semibold">
+                  {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
+                </Button>
+              </div>
             </div>
 
-            {services.map((service, index) => (
-              <TabsContent key={service.id} value={service.id} className="mt-0">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="grid lg:grid-cols-2 gap-12 items-center"
-                >
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary">
-                        {service.icon}
-                      </div>
-                      <div>
-                        <Badge variant="secondary" className="mb-2">
-                          {service.badge}
-                        </Badge>
-                        <h3 className="text-2xl font-bold text-slate-900">{service.title}</h3>
-                        <p className="text-slate-600">{service.subtitle}</p>
-                      </div>
-                    </div>
+            <div className="relative max-w-md mx-auto lg:mx-0">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                className="relative aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden"
+              >
+                <Image
+                  src={service.image || "/placeholder.svg"}
+                  alt={service.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  priority={index === activeService}
+                />
+              </motion.div>
 
-                    <p className="text-slate-600 text-lg leading-relaxed">{service.description}</p>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="h-5 w-5 text-primary" />
-                          <span className="text-slate-600">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center space-x-6 pt-4">
-                      <div className="flex items-center space-x-2">
-                        <Clock className="h-5 w-5 text-slate-400" />
-                        <span className="text-slate-600">{service.duration}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Star className="h-5 w-5 text-slate-400" />
-                        <span className="text-slate-600">{service.price}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                      <Button className="bg-primary hover:bg-primary/90 text-white rounded-full">
-                        {language === "en" ? "Get Started" : "ይጀምሩ"}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" className="rounded-full">
-                        {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="relative">
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.6 }}
-                      className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl"
-                    >
-                      <Image
-                        src={service.image || "/placeholder.svg"}
-                        alt={service.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.3 }}
-                      className="absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-lg border"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                          {service.icon}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-slate-900">{service.price}</div>
-                          <div className="text-slate-500 text-sm">{service.duration}</div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </div>
-      </section>
+              
+            </div>
+          </motion.div>
+        </TabsContent>
+      ))}
+    </Tabs>
+  </div>
+</section>
 
       {/* Process Section */}
       <section className="py-16 md:py-24 bg-slate-50">

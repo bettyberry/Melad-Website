@@ -47,7 +47,7 @@ export default function AboutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
       {/* Hero Section */}
       <section className="relative h-[70vh] min-h-[600px] w-full overflow-hidden">
         <div className="absolute inset-0">
@@ -109,144 +109,154 @@ export default function AboutPage() {
       </section>
 
       {/* Name Origin Section */}
-      <section className="py-2  ml-6 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-72 h-72 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-72 h- bg-secondary/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
+     <section className="py-2 relative overflow-hidden">
+  {/* Decorative elements */}
+  <div className="absolute top-0 right-0 w-1/2 md:w-72 aspect-square bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+  <div className="absolute bottom-0 left-0 w-1/2 md:w-72 aspect-square bg-secondary/5 rounded-full translate-x-1/2 translate-y-1/2"></div>
 
-        <div className="container px-4 md:px-6 relative">
-          <div className="grid gap-16 lg:grid-cols-2 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="space-y-8"
-            >
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary">
-                <History className="h-4 w-4 mr-2" />
-                <span>{language === "en" ? "The Origin of Our Name" : "የስማችን ምንጭ"}</span>
-              </div>
-
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-                {language === "en" ? "The Meaning of 'Melad'" : "የ'ሜላድ' ትርጉም"}
-              </h2>
-
-              <div className="prose prose-lg max-w-none text-slate-600">
-                {language === "en" ? (
-                  <>
-                    <p>
-                      The name 'Melad' derives from the Ge'ez verb meaning "to collect, to gather, to accumulate" -
-                      reflecting our mission to collect, preserve, and promote Ethiopia's ancient manuscript tradition.
-                    </p>
-                    <p>
-                      This name also honors the historical "Melad" manuscript written during the reign of Emperor Zera
-                      Yaqob, which explains the mysteries of the Holy Trinity and the Incarnation of Christ, born
-                      eternally from God the Father without a mother, and later in time from the Virgin Mary without a
-                      father.
-                    </p>
-                    <p>
-                      The manuscript addresses contemporary questions about the Incarnation and provides biblical
-                      evidence regarding the Holy Trinity, the Incarnation, the intercession of the Virgin Mary, and the
-                      saints.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p>(ሜላድ) የሚለው ቃል የስሙ ትርጉዋሜ አለደ ፡አከማቸ ፡ ሰበሰበ ፡ከሚለው የግእዝ ግስ የተገኘ ነው።</p>
-                    <p>
-                      ጌታችንና መድሐኒታችን እግዚአብሔር ወልድ ኢየሱስ ክርስቶስ ፡ ቅድመአለም ከባህሪ አባቱ ፡እግዚአብሔር አብ ያለእናት ድህረ ዓለም ከእመቤታችን ከቅድስት
-                      ድንግል ማርያም ያለአባትከስጋዋ ስጋ ከነፍሱዋ ነፍስ የነሳበትን ፡ነገረ ልደቱን ምስጢረ ስጋዌውን አምልቶ አስፍቶ የሚያስረዳ ሌላው ምስጢረስላሴን አጉልቶ
-                      የሚያስረዳ እና በዘመናችን በሚስጢረ ስጋዌ ላይ ለሚነሱ ጥያቄዎች ተገቢውን መልስ የሚሰጥ በመሆኑ በዚሁ መሰረት መጻፉ (ሜላድ) የተሰኘበት ምስጢረ ስላሴንና
-                      ምስጢረ ስጋዌን እያስረዳ ስለእመቤታችን ቅድስት ድንግል ማርያም እና ስለቅዱሳን አማላጅነት ሁሉ መጻፍቅዱሳዊ ማስረጃ ከነትርጉዋሜያቸው በሊቃውተኢትዮጵያ
-                      ፡ከብሉያትና ከሐዲሳት ተወጣጥቶ በታላቁ ጻድቅ አጼ ዘርአ ያእቆብ ዘመነ መንግስት የተጻፈ ሜላድ የተሰኘ መጻፍ መታሰቢያም ጭምር ነው።
-                    </p>
-                  </>
-                )}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl image-shine ml-7">
-                <Image
-                  src="/images/manuscript-book1.png"
-                  alt="Ancient Ethiopian Manuscript"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="absolute -bottom-8 -left-8 h-32 w-32 rounded-2xl overflow-hidden border-4 border-white shadow-xl animate-float"
-              >
-                <Image src="/images/manuscript-text.png" alt="Manuscript Text Detail" fill className="object-cover" />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="absolute -top-8 -right-8 h-28 w-28 rounded-2xl overflow-hidden border-4 border-white shadow-xl animate-float"
-                style={{ animationDelay: "2s" }}
-              >
-                <Image
-                  src="/images/manuscript-crucifixion.png"
-                  alt="Manuscript Illustration"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-
-              {/* Floating stats card */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="absolute top-1/2 -right-16 transform -translate-y-1/2 glass-card rounded-xl p-4 shadow-lg hidden lg:block"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary">
-                    <BookOpen className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">{language === "en" ? "Historical Reference" : "ታሪካዊ ማጣቀሻ"}</p>
-                    <p className="text-lg font-bold text-slate-900">
-                      {language === "en" ? "Emperor Zera Yaqob Era" : "የአጼ ዘርአ ያዕቆብ ዘመን"}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
+  <div className="container px-4 md:px-6 relative">
+    <div className="grid gap-16 lg:grid-cols-2 items-center">
+      {/* Text Section */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="space-y-8"
+      >
+        <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary">
+          <History className="h-4 w-4 mr-2" />
+          <span>
+            {language === "en" ? "The Origin of Our Name" : "የስማችን ምንጭ"}
+          </span>
         </div>
-      </section>
+
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+          {language === "en" ? "The Meaning of 'Melad'" : "የ'ሜላድ' ትርጉም"}
+        </h2>
+
+        <div className="prose prose-lg max-w-none text-slate-600">
+          {language === "en" ? (
+            <>
+              <p>
+                The name 'Melad' derives from the Ge'ez verb meaning "to
+                collect, to gather, to accumulate" - reflecting our mission to
+                collect, preserve, and promote Ethiopia's ancient manuscript
+                tradition.
+              </p>
+              <p>
+                This name also honors the historical "Melad" manuscript written
+                during the reign of Emperor Zera Yaqob, which explains the
+                mysteries of the Holy Trinity and the Incarnation of Christ,
+                born eternally from God the Father without a mother, and later
+                in time from the Virgin Mary without a father.
+              </p>
+              <p>
+                The manuscript addresses contemporary questions about the
+                Incarnation and provides biblical evidence regarding the Holy
+                Trinity, the Incarnation, the intercession of the Virgin Mary,
+                and the saints.
+              </p>
+            </>
+          ) : (
+            <>
+              <p>
+                (ሜላድ) የሚለው ቃል የስሙ ትርጉዋሜ አለደ ፡አከማቸ ፡ ሰበሰበ ፡ከሚለው የግእዝ ግስ የተገኘ ነው።
+              </p>
+              <p>
+                ጌታችንና መድሐኒታችን እግዚአብሔር ወልድ ኢየሱስ ክርስቶስ...
+              </p>
+            </>
+          )}
+        </div>
+      </motion.div>
+
+      {/* Image Section */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="relative flex justify-center"
+      >
+        <div className="relative w-full max-w-md aspect-[9/8] overflow-hidden rounded-2xl shadow-xl image-shine">
+          <Image
+            src="/images/manuscript-book1.png"
+            alt="Ancient Ethiopian Manuscript"
+            fill
+            className="object-cover"
+          />
+
+          {/* Floating bottom-left image */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="absolute bottom-4 left-4 h-16 w-16 rounded-xl overflow-hidden border-4 border-white shadow-lg animate-float"
+          >
+            <Image
+              src="/images/manuscript-text.png"
+              alt="Manuscript Text Detail"
+              fill
+              className="object-cover"
+            />
+          </motion.div>
+
+          {/* Floating top-right image */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="absolute top-4 right-4 h-16 w-16 rounded-xl overflow-hidden border-4 border-white shadow-lg animate-float"
+            style={{ animationDelay: "2s" }}
+          >
+            <Image
+              src="/images/manuscript-crucifixion.png"
+              alt="Manuscript Illustration"
+              fill
+              className="object-cover"
+            />
+          </motion.div>
+
+          {/* Floating stats card */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="absolute top-1/2 -right-14 transform -translate-y-1/2 glass-card rounded-lg p-3 shadow-md hidden lg:block"
+          >
+            <div className="flex items-center space-x-1">
+              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary">
+                <BookOpen className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-[10px] text-slate-500">
+                  {language === "en"
+                    ? "Historical Reference"
+                    : "ታሪካዊ ማጣቀሻ"}
+                </p>
+                <p className="text-sm font-semibold text-slate-900 ">
+                  {language === "en"
+                    ? "Emperor Zera Yaqob Era"
+                    : "የአጼ ዘርአ ያዕቆብ ዘመን"}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
+  </div>
+</section>
 
       {/* Our History Section with Timeline */}
       <section className="py-20 bg-slate-50 relative overflow-hidden">
         <div className="container px-4 md:px-6 relative">
           <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-4"
-            >
-              <History className="h-4 w-4 mr-2" />
-              <span>{language === "en" ? "Our Journey" : "ጉዞአችን"}</span>
-            </motion.div>
+           
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -577,16 +587,7 @@ export default function AboutPage() {
       <section className="py-20 bg-slate-50 relative overflow-hidden">
         <div className="container px-4 md:px-6 relative">
           <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-4"
-            >
-              <Target className="h-4 w-4 mr-2" />
-              <span>{language === "en" ? "Our Purpose" : "ዓላማችን"}</span>
-            </motion.div>
+            
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -638,282 +639,229 @@ export default function AboutPage() {
               </TabsList>
             </div>
 
-            <TabsContent value="vision" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="relative aspect-square md:aspect-auto md:h-full overflow-hidden rounded-3xl shadow-2xl">
-                  <Image src="/images/manuscript-open3.png" alt="Our Vision" fill className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <h3 className="text-3xl font-bold text-white mb-2">{language === "en" ? "Our Vision" : "ራዕያችን"}</h3>
-                    <p className="text-white/90 text-lg">
-                      {language === "en"
-                        ? "To make authentic Ethiopian manuscripts globally accessible and respected."
-                        : "ተአማኒ እና ውበታቸውን የጠበቁ ብራናዎችን በአለም አቀፍ ደረጃ ተደራሽ ማድረግ።"}
-                    </p>
-                  </div>
-                </div>
+           <TabsContent value="vision" className="mt-0">
+<div className="grid md:grid-cols-2 gap-x-1  items-center">
+    {/* Image & Overlay */}
+    <div className="relative w-full max-w-[400px] aspect-square overflow-hidden rounded-2xl shadow-xl ml-11 ">
+  <Image
+    src="/images/manuscript-open3.png"
+    alt="Our Vision"
+    fill
+    className="object-cover"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+  <div className="absolute bottom-0 left-0 right-0 p-6">
+    <h3 className="text-2xl font-bold text-white mb-1">
+      {language === "en" ? "Our Vision" : "ራዕያችን"}
+    </h3>
+    <p className="text-white/90 text-base leading-snug">
+      {language === "en"
+        ? "To make authentic Ethiopian manuscripts globally accessible and respected."
+        : "ተአማኒ እና ውበታቸውን የጠበቁ ብራናዎችን በአለም አቀፍ ደረጃ ተደራሽ ማድረግ።"}
+    </p>
+  </div>
+</div>
 
-                <div className="space-y-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={activeTab === "vision" ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                        <Globe className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">
-                          {language === "en" ? "Global Recognition" : "አለም አቀፍ እውቅና"}
-                        </h4>
-                        <p className="text-slate-600">
-                          {language === "en"
-                            ? "Elevate Ethiopian manuscript tradition to receive the global recognition it deserves."
-                            : "የኢትዮጵያ የብራና ባህልን ወደ ሚገባው የአለም አቀፍ እውቅና ማሳደግ።"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={activeTab === "vision" ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
-                        <Heart className="h-6 w-6 text-secondary" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">
-                          {language === "en" ? "Cultural Preservation" : "ባህላዊ ጥበቃ"}
-                        </h4>
-                        <p className="text-slate-600">
-                          {language === "en"
-                            ? "Preserve the authentic beauty and integrity of Ethiopian manuscript tradition."
-                            : "የኢትዮጵያ የብራና ባህልን እውነተኛ ውበት እና ሙሉነት መጠበቅ።"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={activeTab === "vision" ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
-                        <Lightbulb className="h-6 w-6 text-accent" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">
-                          {language === "en" ? "Innovation & Tradition" : "ፈጠራ እና ባህል"}
-                        </h4>
-                        <p className="text-slate-600">
-                          {language === "en"
-                            ? "Blend traditional craftsmanship with modern innovation to ensure sustainability."
-                            : "ዘላቂነትን ለማረጋገጥ ባህላዊ ጥበብን ከዘመናዊ ፈጠራ ጋር ማዋሃድ።"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-            </TabsContent>
+    {/* Vision Points */}
+    <div className="space-y-6">
+      {[
+        {
+          icon: Globe,
+          color: "primary",
+          titleEn: "Global Recognition",
+          titleAm: "አለም አቀፍ እውቅና",
+          textEn:
+            "Elevate Ethiopian manuscript tradition to receive the global recognition it deserves.",
+          textAm:
+            "የኢትዮጵያ የብራና ባህልን ወደ ሚገባው የአለም አቀፍ እውቅና ማሳደግ።",
+        },
+        {
+          icon: Heart,
+          color: "secondary",
+          titleEn: "Cultural Preservation",
+          titleAm: "ባህላዊ ጥበቃ",
+          textEn:
+            "Preserve the authentic beauty and integrity of Ethiopian manuscript tradition.",
+          textAm:
+            "የኢትዮጵያ የብራና ባህልን እውነተኛ ውበት እና ሙሉነት መጠበቅ።",
+        },
+        {
+          icon: Lightbulb,
+          color: "accent",
+          titleEn: "Innovation & Tradition",
+          titleAm: "ፈጠራ እና ባህል",
+          textEn:
+            "Blend traditional craftsmanship with modern innovation to ensure sustainability.",
+          textAm:
+            "ዘላቂነትን ለማረጋገጥ ባህላዊ ጥበብን ከዘመናዊ ፈጠራ ጋር ማዋሃድ።",
+        },
+      ].map((item, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 15 }}
+          animate={activeTab === "vision" ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+          transition={{ duration: 0.4, delay: 0.1 * (index + 1) }}
+          className="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300"
+        >
+          <div className="flex items-start gap-3">
+            <div
+              className={`flex-shrink-0 w-10 h-10 bg-${item.color}/10 rounded-full flex items-center justify-center`}
+            >
+              <item.icon className={`h-5 w-5 text-${item.color}`} />
+            </div>
+            <div>
+              <h4 className="text-lg font-bold text-slate-900 mb-1">
+                {language === "en" ? item.titleEn : item.titleAm}
+              </h4>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                {language === "en" ? item.textEn : item.textAm}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</TabsContent>
 
-            <TabsContent value="mission" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="space-y-8 order-2 md:order-1">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={activeTab === "mission" ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                        <Users className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">
-                          {language === "en" ? "Artisan Support" : "የባለሙያዎች ድጋፍ"}
-                        </h4>
-                        <p className="text-slate-600">
-                          {language === "en"
-                            ? "Provide fair compensation, healthcare, and professional development for manuscript artisans."
-                            : "ለብራና ባለሙያዎች ፍትሃዊ ክፍያ፣ የጤና እንክብካቤ እና የሙያ ልማት መስጠት።"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={activeTab === "mission" ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
-                        <Clock className="h-6 w-6 text-secondary" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">
-                          {language === "en" ? "Timely Delivery" : "በጊዜው ማድረስ"}
-                        </h4>
-                        <p className="text-slate-600">
-                          {language === "en"
-                            ? "Address the challenge of timely manuscript delivery through improved processes and management."
-                            : "የተሻሻሉ ሂደቶችን እና አስተዳደርን በመጠቀም የብራና መጻህፍትን በጊዜው የማድረስ ችግርን መፍታት።"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
+          <TabsContent value="mission" className="mt-0">
+  <div className="grid md:grid-cols-2 gap-4 items-center ml-8">
+    <div className="space-y-6 order-2 md:order-1">
+      {[{
+        icon: Users,
+        bgColor: "primary",
+        titleEn: "Artisan Support",
+        titleAm: "የባለሙያዎች ድጋፍ",
+        textEn:
+          "Provide fair compensation, healthcare, and professional development for manuscript artisans.",
+        textAm:
+          "ለብራና ባለሙያዎች ፍትሃዊ ክፍያ፣ የጤና እንክብካቤ እና የሙያ ልማት መስጠት።",
+      },{
+        icon: Clock,
+        bgColor: "secondary",
+        titleEn: "Timely Delivery",
+        titleAm: "በጊዜው ማድረስ",
+        textEn:
+          "Address the challenge of timely manuscript delivery through improved processes and management.",
+        textAm:
+          "የተሻሻሉ ሂደቶችን እና አስተዳደርን በመጠቀም የብራና መጻህፍትን በጊዜው የማድረስ ችግርን መፍታት።",
+      },{
+        icon: CheckCircle2,
+        bgColor: "accent",
+        titleEn: "Quality Assurance",
+        titleAm: "የጥራት ዋስትና",
+        textEn:
+          "Develop improved methods to correct errors without damaging the parchment or compromising beauty.",
+        textAm:
+          "ብራናውን ሳይጎዳ ወይም ውበቱን ሳያስተጓጉል ስህተቶችን ለማረም የተሻሻሉ ዘዴዎችን ማዳበር።",
+      }].map(({icon: Icon, bgColor, titleEn, titleAm, textEn, textAm}, idx) => (
+        <motion.div
+          key={idx}
+          initial={{ opacity: 0, y: 20 }}
+          animate={activeTab === "mission" ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.1 * (idx + 1) }}
+          className="bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300"
+        >
+          <div className="flex items-start gap-3">
+            <div className={`flex-shrink-0 w-10 h-10 bg-${bgColor}/10 rounded-full flex items-center justify-center`}>
+              <Icon className={`h-5 w-5 text-${bgColor}`} />
+            </div>
+            <div>
+              <h4 className="text-lg font-bold text-slate-900 mb-1">
+                {language === "en" ? titleEn : titleAm}
+              </h4>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                {language === "en" ? textEn : textAm}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={activeTab === "mission" ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
-                        <CheckCircle2 className="h-6 w-6 text-accent" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">
-                          {language === "en" ? "Quality Assurance" : "የጥራት ዋስትና"}
-                        </h4>
-                        <p className="text-slate-600">
-                          {language === "en"
-                            ? "Develop improved methods to correct errors without damaging the parchment or compromising beauty."
-                            : "ብራናውን ሳይጎዳ ወይም ውበቱን ሳያስተጓጉል ስህተቶችን ለማረም የተሻሻሉ ዘዴዎችን ማዳበር።"}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-
-                <div className="relative aspect-square md:aspect-auto md:h-full overflow-hidden rounded-3xl shadow-2xl order-1 md:order-2">
-                  <Image src="/images/manuscript-1.png" alt="Our Mission" fill className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <h3 className="text-3xl font-bold text-white mb-2">
-                      {language === "en" ? "Our Mission" : "ተልዕኮአችን"}
-                    </h3>
-                    <p className="text-white/90 text-lg">
-                      {language === "en"
-                        ? "To address the challenges facing traditional manuscript creation through innovation and support."
-                        : "በፈጠራ እና በድጋፍ ባህላዊ የብራና ጽሑፍ ፈጠራን የሚያጋጥሙ ችግሮችን መፍታት።"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
+    <div className="relative w-full max-w-[400px] aspect-square overflow-hidden rounded-3xl shadow-2xl order-1 md:order-2 mx-auto">
+      <Image
+        src="/images/manuscript-1.png"
+        alt="Our Mission"
+        fill
+        className="object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 p-6">
+        <h3 className="text-3xl font-bold text-white mb-2">
+          {language === "en" ? "Our Mission" : "ተልዕኮአችን"}
+        </h3>
+        <p className="text-white/90 text-lg">
+          {language === "en"
+            ? "To address the challenges facing traditional manuscript creation through innovation and support."
+            : "በፈጠራ እና በድጋፍ ባህላዊ የብራና ጽሑፍ ፈጠራን የሚያጋጥሙ ችግሮችን መፍታት።"}
+        </p>
+      </div>
+    </div>
+  </div>
+</TabsContent>
 
             <TabsContent value="goals" className="mt-0">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="relative aspect-square md:aspect-auto md:h-full overflow-hidden rounded-3xl shadow-2xl">
-                  <Image src="/images/manuscript-2.png" alt="Our Goals" fill className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <h3 className="text-3xl font-bold text-white mb-2">{language === "en" ? "Our Goals" : "ግቦቻችን"}</h3>
-                    <p className="text-white/90 text-lg">
-                      {language === "en"
-                        ? "Specific objectives that guide our work and measure our success."
-                        : "ስራችንን የሚመሩ እና ስኬታችንን የሚለኩ ልዩ ዓላማዎች።"}
-                    </p>
-                  </div>
-                </div>
+  <div className="grid md:grid-cols-2 gap-2 items-center ml-11">
+    <div className="relative w-full max-w-[400px] aspect-square overflow-hidden rounded-3xl shadow-2xl">
+      <Image
+        src="/images/manuscript-2.png"
+        alt="Our Goals"
+        fill
+        className="object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 p-6">
+        <h3 className="text-3xl font-bold text-white mb-2">
+          {language === "en" ? "Our Goals" : "ግቦቻችን"}
+        </h3>
+        <p className="text-white/90 text-lg">
+          {language === "en"
+            ? "Specific objectives that guide our work and measure our success."
+            : "ስራችንን የሚመሩ እና ስኬታችንን የሚለኩ ልዩ ዓላማዎች።"}
+        </p>
+      </div>
+    </div>
 
-                <div className="space-y-4">
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={activeTab === "goals" ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                    transition={{ duration: 0.4 }}
-                    className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-4"
-                  >
-                    <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                      <span className="text-primary font-bold">1</span>
-                    </div>
-                    <p className="text-slate-700">
-                      {language === "en"
-                        ? "Make Ethiopian manuscripts accessible to churches and believers."
-                        : "የኢትዮጵያ ብራና መጻህፍትን ለአብያተ ክርስቲያናት እና ለምእመናን ተደራሽ ማድረግ።"}
-                    </p>
-                  </motion.div>
+    <div className="space-y-4">
+      {[ 
+        "Make Ethiopian manuscripts accessible to churches and believers.",
+        "Combat exploitation by middlemen who purchase manuscripts at low prices from artisans and sell at inflated prices.",
+        "Develop technology-assisted methods to correct errors without damaging the parchment.",
+        "Improve writing techniques to enhance the quality and beauty of manuscripts.",
+        "Ensure timely delivery of commissioned manuscripts through improved processes."
+      ].map((textEn, idx) => {
+        const textsAm = [
+          "የኢትዮጵያ ብራና መጻህፍትን ለአብያተ ክርስቲያናት እና ለምእመናን ተደራሽ ማድረግ።",
+          "ከባለሙያዎች በዝቅተኛ ዋጋ ብራናዎችን ገዝተው በከፍተኛ ዋጋ የሚሸጡ አቅራቢዎችን መዋጋት።",
+          "ብራናውን ሳይጎዳ ስህተቶችን ለማረም በቴክኖሎጂ የሚደገፉ ዘዴዎችን ማዳበር።",
+          "የብራና መጻህፍትን ጥራት እና ውበት ለማሻሻል የአጻጻፍ ቴክኒኮችን ማሻሻል።",
+          "የተሻሻሉ ሂደቶችን በመጠቀም የታዘዙ ብራናዎችን በጊዜው ማድረስ።"
+        ];
+        return (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, x: 20 }}
+            animate={activeTab === "goals" ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+            transition={{ duration: 0.4, delay: 0.1 * idx }}
+            className="bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-4"
+          >
+            <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+              <span className="text-primary font-bold">{idx + 1}</span>
+            </div>
+            <p className="text-slate-700 text-sm leading-relaxed">
+              {language === "en" ? textEn : textsAm[idx]}
+            </p>
+          </motion.div>
+        );
+      })}
+    </div>
+  </div>
+</TabsContent>
 
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={activeTab === "goals" ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                    transition={{ duration: 0.4, delay: 0.1 }}
-                    className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-4"
-                  >
-                    <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                      <span className="text-primary font-bold">2</span>
-                    </div>
-                    <p className="text-slate-700">
-                      {language === "en"
-                        ? "Combat exploitation by middlemen who purchase manuscripts at low prices from artisans and sell at inflated prices."
-                        : "ከባለሙያዎች በዝቅተኛ ዋጋ ብራናዎችን ገዝተው በከፍተኛ ዋጋ የሚሸጡ አቅራቢዎችን መዋጋት።"}
-                    </p>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={activeTab === "goals" ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
-                    className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-4"
-                  >
-                    <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                      <span className="text-primary font-bold">3</span>
-                    </div>
-                    <p className="text-slate-700">
-                      {language === "en"
-                        ? "Develop technology-assisted methods to correct errors without damaging the parchment."
-                        : "ብራናውን ሳይጎዳ ስህተቶችን ለማረም በቴክኖሎጂ የሚደገፉ ዘዴዎችን ማዳበር።"}
-                    </p>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={activeTab === "goals" ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                    transition={{ duration: 0.4, delay: 0.3 }}
-                    className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-4"
-                  >
-                    <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                      <span className="text-primary font-bold">4</span>
-                    </div>
-                    <p className="text-slate-700">
-                      {language === "en"
-                        ? "Improve writing techniques to enhance the quality and beauty of manuscripts."
-                        : "የብራና መጻህፍትን ጥራት እና ውበት ለማሻሻል የአጻጻፍ ቴክኒኮችን ማሻሻል።"}
-                    </p>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={activeTab === "goals" ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                    transition={{ duration: 0.4, delay: 0.4 }}
-                    className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-4"
-                  >
-                    <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                      <span className="text-primary font-bold">5</span>
-                    </div>
-                    <p className="text-slate-700">
-                      {language === "en"
-                        ? "Ensure timely delivery of commissioned manuscripts through improved processes."
-                        : "የተሻሻሉ ሂደቶችን በመጠቀም የታዘዙ ብራናዎችን በጊዜው ማድረስ።"}
-                    </p>
-                  </motion.div>
-                </div>
-              </div>
-            </TabsContent>
           </Tabs>
         </div>
       </section>
@@ -959,15 +907,16 @@ export default function AboutPage() {
               className="flex flex-wrap gap-4 justify-center"
             >
               <Button
+                variant="outline"
                 size="lg"
-                className="rounded-full bg-white text-primary hover:bg-white/90 shadow-lg text-base py-6 px-8 h-auto"
+                className="rounded-full bg-white text-primary  hover:bg-white/10 shadow-lg text-base py-6 px-8 h-auto"
               >
                 {language === "en" ? "Contact Us" : "ያግኙን"}
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-full border-white text-white hover:bg-white/10 text-base py-6 px-8 h-auto"
+                className="rounded-full border-white text-primary hover:bg-white/10 text-base py-6 px-8 h-auto"
               >
                 {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
               </Button>

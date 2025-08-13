@@ -228,7 +228,7 @@ export default function ProductsPage() {
   const featuredProducts = products.filter((product) => product.featured)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
         <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
@@ -868,12 +868,15 @@ export default function ProductsPage() {
                 : "ዋና ባለሙያዎቻችን እንደ ልዩ ፍላጎትዎ የተዘጋጁ ልዩ ብራናዎችን እና ጥበብ ሥራዎችን መፍጠር ይችላሉ።"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="h-12 px-8 bg-white text-primary hover:bg-white/90 rounded-full text-base">
+              <Button
+              variant="outline"
+
+               className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base">
                 {language === "en" ? "Request Custom Order" : "ልዩ ትዕዛዝ ይጠይቁ"}
               </Button>
               <Button
                 variant="outline"
-                className="h-12 px-8 border-white/30 text-white hover:bg-white/10 rounded-full text-base"
+                className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
               >
                 {language === "en" ? "View Portfolio" : "ፖርትፎሊዮ ይመልከቱ"}
               </Button>
