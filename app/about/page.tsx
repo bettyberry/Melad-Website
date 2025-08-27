@@ -51,67 +51,64 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
       {/* Hero Section */}
-      <section className="relative h-[70vh] min-h-[600px] w-full overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="relative h-full w-full">
-            <Image src="/images/manuscript-5.png" alt="About Melad" fill className="object-cover" priority />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
-          </div>
-        </div>
+      <section className="relative h-[55vh] min-h-[500px] w-full overflow-hidden">
+  <div className="absolute inset-0">
+    <div className="relative h-full w-full">
+      <Image src="/images/manuscript-5.png" alt="About Melad" fill className="object-cover" priority />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+    </div>
+  </div>
 
-        <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-8 text-center px-4">
-          
+  <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
+    <motion.h1
+      initial={{ opacity: 0, y: -15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl max-w-4xl"
+    >
+      {language === "en" ? "Preserving Ethiopia's Sacred Manuscript Heritage" : "የኢትዮጵያን ቅዱስ የብራና ቅርስ መጠበቅ"}
+    </motion.h1>
 
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl lg:text-7xl max-w-5xl"
-          >
-            {language === "en" ? "Preserving Ethiopia's Sacred Manuscript Heritage" : "የኢትዮጵያን ቅዱስ የብራና ቅርስ መጠበቅ"}
-          </motion.h1>
+    <motion.p
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      className="max-w-[700px] text-white/90 md:text-lg"
+    >
+      {language === "en"
+        ? "Melad Ancient Parchment Books Preparation Center combines traditional craftsmanship with modern innovation to preserve our cultural and spiritual heritage"
+        : "ሜላድ ጥንታዊ የብራና ጽሑፍ ማእከል ባህላዊ ጥበብን ከዘመናዊ ፈጠራ ጋር በማዋሃድ የባህልና መንፈሳዊ ቅርሳችንን ይጠብቃል"}
+    </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-[800px] text-white/90 md:text-xl"
-          >
-            {language === "en"
-              ? "Melad Ancient Parchment Books Preparation Center combines traditional craftsmanship with modern innovation to preserve our cultural and spiritual heritage"
-              : "ሜላድ ጥንታዊ የብራና ጽሑፍ ማእከል ባህላዊ ጥበብን ከዘመናዊ ፈጠራ ጋር በማዋሃድ የባህልና መንፈሳዊ ቅርሳችንን ይጠብቃል"}
-          </motion.p>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.3 }}
+      className="flex flex-wrap gap-3 justify-center mt-6"
+    >
+      <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-md text-sm py-4 px-6 h-auto">
+        {language === "en" ? "Our Story" : "ታሪካችን"}
+      </Button>
+      <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-md text-sm py-4 px-6 h-auto">
+        {language === "en" ? "Meet Our Team" : "ቡድናችንን ያግኙ"}
+      </Button>
+    </motion.div>
+  </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-wrap gap-4 justify-center mt-8"
-          >
-            <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-lg text-base py-6 px-8 h-auto">
-              {language === "en" ? "Our Story" : "ታሪካችን"}
-            </Button>
-                        <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-lg text-base py-6 px-8 h-auto">
-
-              {language === "en" ? "Meet Our Team" : "ቡድናችንን ያግኙ"}
-            </Button>
-          </motion.div>
-        </div>
-
-        {/* Decorative wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-auto text-white">
-            <path
-              fill="currentColor"
-              fillOpacity="1"
-              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-            ></path>
-          </svg>
-        </div>
-      </section>
+  {/* Decorative wave - smaller */}
+  <div className="absolute bottom-0 left-0 right-0">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 150" className="w-full h-auto text-white">
+      <path
+        fill="currentColor"
+        fillOpacity="1"
+        d="M0,64L48,74.7C96,85,192,107,288,112C384,117,480,107,576,96C672,85,768,75,864,74.7C960,75,1056,85,1152,90C1248,96,1344,96,1392,96L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+      ></path>
+    </svg>
+  </div>
+</section>
 
       {/* Name Origin Section */}
-     <section className="py-2 relative overflow-hidden">
+<section className="pt-28 pb-11 relative overflow-hidden">
   {/* Decorative elements */}
   <div className="absolute top-0 right-0 w-1/2 md:w-72 aspect-square bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
   <div className="absolute bottom-0 left-0 w-1/2 md:w-72 aspect-square bg-secondary/5 rounded-full translate-x-1/2 translate-y-1/2"></div>

@@ -211,217 +211,158 @@ export default function ManuscriptsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-10 mr-10">
       {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="relative h-full w-full">
-            <Image
-              src="/images/manuscript-open1.png"
-              alt="Ethiopian Manuscripts"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
-          </div>
-        </div>
+     <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden">
+  <div className="absolute inset-0">
+    <div className="relative h-full w-full">
+      <Image
+        src="/images/manuscript-open1.png"
+        alt="Ethiopian Manuscripts"
+        fill
+        className="object-cover"
+        priority
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
+    </div>
+  </div>
 
-        <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
-          
+  <div className="container relative z-10 flex h-full flex-col items-center justify-start space-y-4 text-center px-4 pt-32">
+    <motion.h1
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
+      className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl mt-0"
+    >
+      {language === "en" ? "Ancient Ethiopian Manuscript Tradition" : "ጥንታዊ የኢትዮጵያ የብራና ጽሑፍ ባህል"}
+    </motion.h1>
 
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl"
-          >
-            {language === "en" ? "Ancient Ethiopian Manuscript Tradition" : "ጥንታዊ የኢትዮጵያ የብራና ጽሑፍ ባህል"}
-          </motion.h1>
+    <motion.p
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      className="max-w-[800px] text-white/90 md:text-xl"
+    >
+      {language === "en"
+        ? "Melad Ancient Parchment Books Preparation Center preserves Ethiopia's rich manuscript heritage through authentic craftsmanship and traditional techniques."
+        : "ሜላድ ጥንታዊ የብራና ጽሑፍ ማዕከል ኢትዮጵያ ሀብታም የብራና ቅርስ በእውነተኛ ጥበብና ባህላዊ ቴክኒኮች ይጠብቃል።"}
+    </motion.p>
+  </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-[800px] text-white/90 md:text-xl"
-          >
-            {language === "en"
-              ? "Melad Ancient Parchment Books Preparation Center preserves Ethiopia's rich manuscript heritage through authentic craftsmanship and traditional techniques."
-              : "ሜላድ ጥንታዊ የብራና ጽሑፍ ማዕከል ኢትዮጵያ ሀብታም የብራና ቅርስ በእውነተኛ ጥበብና ባህላዊ ቴክኒኮች ይጠብቃል።"}
-          </motion.p>
-        </div>
+  {/* Decorative wave */}
+  <div className="absolute bottom-0 left-0 right-0">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-auto text-white">
+      <path
+        fill="currentColor"
+        fillOpacity="1"
+        d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+      ></path>
+    </svg>
+  </div>
+</section>
 
-        {/* Decorative wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-auto text-white">
-            <path
-              fill="currentColor"
-              fillOpacity="1"
-              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-            ></path>
-          </svg>
-        </div>
-      </section>
 
-      {/* Introduction Section */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="container px-4 md:px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-6">
-                <Info className="h-4 w-4 mr-2" />
-                <span>{language === "en" ? "About Melad Manuscripts" : "ስለ ሜላድ ብራናዎች"}</span>
-              </div>
-
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-6">
-                {language === "en" ? "The Meaning of Melad" : "የሜላድ ትርጉም"}
-              </h2>
-
-              <p className="text-slate-600 mb-4">
-                {language === "en"
-                  ? "The name 'Melad' comes from the Ge'ez verb meaning 'to collect, to gather, to accumulate' - reflecting our mission to collect, preserve, and promote Ethiopia's ancient manuscript tradition."
-                  : "(ሜላድ) የስሙ ትርጉሙ አለደ ፡አከማቸ ፡ ሰበሰበ ፡ከሚለው የግእዝ ግስ የተገኘ ነው። ይህም የኢትዮጵያን ጥንታዊ የብራና ባህል መሰብሰብ፣ መጠበቅና ማስፋፋት የሚለውን ተልእኮአችንን ያንጸባርቃል።"}
-              </p>
-
-              <p className="text-slate-600 mb-4">
-                {language === "en"
-                  ? "Founded by Megabe Tibebat Qomos Aba Kidane Mariam Abebe and Bekure Me'emenan Ato Fiqadu Anbesu, Melad is dedicated to preserving Ethiopia's rich manuscript heritage and passing it to future generations."
-                  : "መስራች መጋቤ ጥበባት ቆሞስ አባ ኪዳነ ማርያም አበበ እና በኩረ ምእመናን አቶ ፍቃዱ አንበሱ የመሰረቱት ሜላድ የኢትዮጵያን ሀብታም የብራና ቅርስ ለመጠበቅ እና ለወደፊት ትውልድ ለማስተላለፍ የተሰጠ ነው።"}
-              </p>
-
-              <p className="text-slate-600 mb-6">
-                {language === "en"
-                  ? "Melad was established on June 24, 2015, after two years of intensive research on the challenges facing traditional manuscript creation. Today, the center is a legally licensed organization employing skilled artisans dedicated to this ancient craft."
-                  : "ሜላድ ጥንታዊ የብራና ጽሑፍ ማእከል 2015 ሰኔ 24 ቀን ከሁለት አመት የጥናት በኋላ በባህላዊ የብራና ስራ ላይ ያሉትን ችግሮች በመረዳት ተመሰረተ። ዛሬ ማዕከሉ በዚህ ጥንታዊ ጥበብ የሚሰሩ ብቁ ባለሙያዎችን የሚያሰራ ህጋዊ ፈቃድ ያለው ድርጅት ነው።"}
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-md">
-                  {language === "en" ? "Our Mission" : "ተልእኮአችን"}
-                </Button>
-                <Button variant="outline" className="rounded-full">
-                  {language === "en" ? "Our Team" : "ቡድናችን"}
-                </Button>
-              </div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl">
-                <Image src="/images/manuscript-open2.png" alt="Ethiopian Manuscript" fill className="object-cover" />
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="absolute -bottom-6 -left-6 h-32 w-32 rounded-2xl overflow-hidden border-4 border-white shadow-xl animate-float"
-              >
-                <Image src="/images/manuscript-text.png" alt="Manuscript Detail" fill className="object-cover" />
-              </motion.div>
-
-              {/* Stats card */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="absolute -top-6 -right-6 glass-card rounded-xl p-4 shadow-lg hidden md:block"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary">
-                    <Users className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">{language === "en" ? "Skilled Artisans" : "ብቁ ባለሙያዎች"}</p>
-                    <p className="text-lg font-bold text-slate-900">38</p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* Manuscript Gallery */}
-      <section className="py-16 md:py-24 bg-slate-50">
-        <div className="container px-4 md:px-6">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-4">
-              <BookOpen className="h-4 w-4 mr-2" />
-              <span>{language === "en" ? "Our Manuscripts" : "የኛ ብራናዎች"}</span>
-            </div>
+      <section className="py-16 md:py-20 bg-slate-50">
+  <div className="container px-4 md:px-6 mx-auto">
+    <div className="text-center mb-14">
+      <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-primary/10 text-xs font-medium text-primary mb-5 tracking-wide">
+        <BookOpen className="h-3.5 w-3.5 mr-1.5" />
+        <span>{language === "en" ? "Our Manuscripts" : "የኛ ብራናዎች"}</span>
+      </div>
 
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">
-              {language === "en" ? "Explore Our Collection" : "ስብስባችንን ይመልከቱ"}
-            </h2>
+      <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-5 leading-tight">
+        {language === "en" ? "Explore Our Collection" : "ስብስባችንን ይመልከቱ"}
+      </h2>
 
-            <p className="text-slate-600 max-w-3xl mx-auto mb-8">
-              {language === "en"
-                ? "Each manuscript created at Melad is a unique work of art that preserves Ethiopia's rich literary and religious heritage."
-                : "በሜላድ የሚፈጠር እያንዳንዱ ብራና የኢትዮጵያን ሀብታም የጽሑፍና የሃይማኖት ቅርስ የሚጠብቅ ልዩ የጥበብ ሥራ ነው።"}
-            </p>
+      <p className="text-slate-600 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+        {language === "en"
+          ? "Each manuscript created at Melad is a unique work of art that preserves Ethiopia's rich literary and religious heritage."
+          : "በሜላድ የሚፈጠር እያንዳንዱ ብራና የኢትዮጵያን ሀብታም የጽሑፍና የሃይማኖት ቅርስ የሚጠብቅ ልዩ የጥበብ ሥራ ነው።"}
+      </p>
+    </div>
 
-            <Tabs defaultValue="all" className="w-full">
-              <TabsList className="bg-white p-1 rounded-full shadow-md inline-flex mb-8">
-                {categories.map((category) => (
-                  <TabsTrigger
-                    key={category.id}
-                    value={category.id}
-                    onClick={() => setFilter(category.id)}
-                    className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-2"
-                  >
-                    {category.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+    <div className="flex justify-center mb-12">
+      <div className="bg-white p-1 rounded-lg shadow-sm inline-flex border border-slate-200">
+        {categories.map((category) => (
+          <button
+            key={category.id}
+            onClick={() => setFilter(category.id)}
+            className={`px-5 py-2.5 text-sm font-medium rounded-md transition-all ${
+              filter === category.id
+                ? "bg-primary text-white shadow-sm"
+                : "text-slate-700 hover:text-primary"
+            }`}
           >
-            {filteredManuscripts.map((item, index) => (
-              <motion.div key={index} variants={itemVariants} className="group" onClick={() => setSelectedImage(index)}>
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover-card">
-                  <div className="relative aspect-[3/4] w-full overflow-hidden">
-                    <Image
-                      src={item.src || "/placeholder.svg"}
-                      alt={item.alt}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            {category.label}
+          </button>
+        ))}
+      </div>
+    </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 className="text-xl font-bold text-white">{item.title}</h3>
-                      <p className="text-white/80 mt-2 line-clamp-2">{item.description}</p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="mt-4 text-white border-white/30 bg-white/10 hover:bg-white/20"
-                      >
-                        <ZoomIn className="mr-2 h-4 w-4" />
-                        {language === "en" ? "View Details" : "ዝርዝር ይመልከቱ"}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+    <motion.div
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.08,
+          },
+        },
+      }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+    >
+      {filteredManuscripts.map((item, index) => (
+        <motion.div
+          key={index}
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: {
+                duration: 0.5,
+              },
+            },
+          }}
+          className="group flex justify-center"
+          onClick={() => setSelectedImage(index)}
+        >
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-md w-full border border-slate-100">
+            <div className="relative aspect-[4/4] overflow-hidden">
+              <Image
+                src={item.src || "/placeholder.svg"}
+                alt={item.alt}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-5 group-hover:translate-y-0 transition-transform duration-500">
+                <h3 className="text-lg font-semibold text-white mb-1.5">{item.title}</h3>
+                <p className="text-white/90 text-sm mb-3 line-clamp-2 leading-relaxed">{item.description}</p>
+                <button className="flex items-center text-xs font-medium text-white/90 hover:text-white transition-colors">
+                  <ZoomIn className="mr-1.5 h-3.5 w-3.5" />
+                  {language === "en" ? "View Details" : "ዝርዝር ይመልከቱ"}
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-4">
+              <h3 className="font-medium text-slate-900 mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
+              <p className="text-slate-600 text-sm line-clamp-2">{item.description}</p>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+</section>
 
       {/* Process Section */}
       <section className="py-16 md:py-24 bg-white">
@@ -481,123 +422,82 @@ export default function ManuscriptsPage() {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 md:py-24 bg-slate-50">
-        <div className="container px-4 md:px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-6">
-                <Sparkles className="h-4 w-4 mr-2" />
-                <span>{language === "en" ? "Our Services" : "አገልግሎቶቻችን"}</span>
-              </div>
-
-              <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-6">
-                {language === "en" ? "Preserving Tradition Through Craftsmanship" : "ባህልን በጥበብ መጠበቅ"}
-              </h2>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 mt-1 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <span className="font-bold">1</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">
-                      {language === "en" ? "Parchment Preparation" : "የብራና ቆዳ ዝግጅት"}
-                    </h3>
-                    <p className="text-slate-600 mt-2">
-                      {language === "en"
-                        ? "We process goat leather to create authentic parchment for manuscripts, religious art, begena and krar instruments."
-                        : "የፍየል ቆዳን ፕሮሰስ አድርገን ለብራና ጽሑፍ፣ ለቅዱሳን ስእላት መሳያ፣ ለበገነ መስሪያ፣ ለክራር መስሪያ እንዲሆን እናዘጋጃለን።"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 mt-1 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <span className="font-bold">2</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">
-                      {language === "en" ? "Manuscript Creation" : "የብራና መጽሐፍት ዝግጅት"}
-                    </h3>
-                    <p className="text-slate-600 mt-2">
-                      {language === "en"
-                        ? "We create complete manuscripts including Gedlat (hagiographies), Dersanat (homilies) and other religious texts to order."
-                        : "ገድላትን፣ ድርሳናትን፣ ትናንሽ መልካም ልኮችን በብራና አዘጋጅተን ለተፈለገበት ገዳም ደብር በተባለው ቀን እናቀርባለን።"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 mt-1 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <span className="font-bold">3</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">
-                      {language === "en" ? "Religious Art & Decoration" : "ቅዱስ ስዕል እና ጌጥ"}
-                    </h3>
-                    <p className="text-slate-600 mt-2">
-                      {language === "en"
-                        ? "We create sacred illustrations and traditional Ethiopian decorative patterns (harag) on parchment."
-                        : "ቅዱሳት ስእላትን በብራና እንሳላለን፤ ሐረግንም በብራና እንሰራለን።"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 mt-1 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <span className="font-bold">4</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-slate-900">
-                      {language === "en" ? "Manuscript Restoration" : "የብራና መጽሐፍት እድሳት"}
-                    </h3>
-                    <p className="text-slate-600 mt-2">
-                      {language === "en"
-                        ? "We correct, illustrate, and rebind existing manuscripts, adding appropriate illustrations and decorative elements."
-                        : "የተጻፉ መጻሕፍትን ገድላትን ድርሳናትን አርመን በየታሪክ ቦታው ስእላቶችን ሐረጎችን ስለን ደጉሰን እናቀርባለን።"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="relative"
-              >
-                <div className="relative aspect-video w-full overflow-hidden rounded-3xl shadow-2xl">
-                  <Image
-                    src="/images/manuscript-crucifixion.png"
-                    alt="Manuscript Illumination"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                  className="absolute -top-6 -right-6 w-32 h-32 rounded-xl overflow-hidden border-4 border-white shadow-xl animate-float"
-                  style={{ animationDelay: "1s" }}
-                >
-                  <Image
-                    src="/images/manuscript-closed.png"
-                    alt="Religious Illumination"
-                    fill
-                    className="object-cover"
-                  />
-                </motion.div>
-              </motion.div>
-            </div>
-          </div>
+<section className="py-16 md:py-20 bg-slate-50 ml-10">
+  <div className="container px-4 md:px-6">
+    <div className="grid md:grid-cols-2 gap-10 items-center">
+      
+      {/* Text Area */}
+      <div>
+        <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-sm font-medium text-primary mb-4">
+          <Sparkles className="h-4 w-4 mr-2" />
+          <span>{language === "en" ? "Our Services" : "አገልግሎቶቻችን"}</span>
         </div>
-      </section>
+
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mb-5">
+          {language === "en" ? "Preserving Tradition Through Craftsmanship" : "ባህልን በጥበብ መጠበቅ"}
+        </h2>
+
+        <div className="space-y-4">
+          {[
+            { num: "1", title: language === "en" ? "Parchment Preparation" : "የብራና ቆዳ ዝግጅት", text: language === "en" ? "We process goat leather to create authentic parchment for manuscripts, religious art, begena and krar instruments." : "የፍየል ቆዳን ፕሮሰስ አድርገን ለብራና ጽሑፍ፣ ለቅዱሳን ስእላት መሳያ፣ ለበገነ መስሪያ፣ ለክራር መስሪያ እንዲሆን እናዘጋጃለን።" },
+            { num: "2", title: language === "en" ? "Manuscript Creation" : "የብራና መጽሐፍት ዝግጅት", text: language === "en" ? "We create complete manuscripts including Gedlat (hagiographies), Dersanat (homilies) and other religious texts to order." : "ገድላትን፣ ድርሳናትን፣ ትናንሽ መልካም ልኮችን በብራና አዘጋጅተን ለተፈለገበት ገዳም ደብር በተባለው ቀን እናቀርባለን።" },
+            { num: "3", title: language === "en" ? "Religious Art & Decoration" : "ቅዱስ ስዕል እና ጌጥ", text: language === "en" ? "We create sacred illustrations and traditional Ethiopian decorative patterns (harag) on parchment." : "ቅዱሳት ስእላትን በብራና እንሳላለን፤ ሐረግንም በብራና እንሰራለን።" },
+            { num: "4", title: language === "en" ? "Manuscript Restoration" : "የብራና መጽሐፍት እድሳት", text: language === "en" ? "We correct, illustrate, and rebind existing manuscripts, adding appropriate illustrations and decorative elements." : "የተጻፉ መጻሕፍትን ገድላትን ድርሳናትን አርመን በየታሪክ ቦታው ስእላቶችን ሐረጎችን ስለን ደጉሰን እናቀርባለን።" }
+          ].map((item) => (
+            <div className="flex items-start space-x-3" key={item.num}>
+              <div className="flex-shrink-0 mt-1 w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                {item.num}
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
+                <p className="text-slate-600 mt-1 text-sm">{item.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Image Area */}
+      <div className="relative">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative"
+        >
+          {/* Main Image */}
+          <div className="relative aspect-[4/4] w-full max-w-md mx-auto overflow-hidden rounded-2xl shadow-xl">
+            <Image
+              src="/images/manuscript-crucifixion.png"
+              alt="Manuscript Illumination"
+              fill
+              className="object-cover"
+            />
+
+            {/* Floating Image */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="absolute top-4 right-4 w-20 h-20 rounded-xl overflow-hidden border-4 border-white shadow-lg animate-float"
+            >
+              <Image
+                src="/images/manuscript-closed.png"
+                alt="Religious Illumination"
+                fill
+                className="object-cover"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
       {/* CTA Section */}
       <section className="py-20 bg-primary relative overflow-hidden">
@@ -621,7 +521,7 @@ export default function ManuscriptsPage() {
               </Button>
               <Button
                 variant="outline"
-                className="h-12 px-8 border-white/30 text-white hover:bg-white/10 rounded-full text-base"
+                className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base"
               >
                 {language === "en" ? "Support Our Mission" : "ተልእኮአችንን ይደግፉ"}
               </Button>

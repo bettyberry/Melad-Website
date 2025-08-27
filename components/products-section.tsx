@@ -168,7 +168,7 @@ export default function ProductsSection() {
                 <ChevronRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href="/products">
               <Button
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary hover:text-white rounded-full px-8"

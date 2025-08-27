@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 import { useLanguage } from "@/components/language-provider"
 import Image from "next/image"
@@ -868,12 +869,14 @@ export default function ProductsPage() {
                 : "ዋና ባለሙያዎቻችን እንደ ልዩ ፍላጎትዎ የተዘጋጁ ልዩ ብራናዎችን እና ጥበብ ሥራዎችን መፍጠር ይችላሉ።"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-              variant="outline"
-
-               className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base">
-                {language === "en" ? "Request Custom Order" : "ልዩ ትዕዛዝ ይጠይቁ"}
-              </Button>
+              <Link href="/products">
+    <Button
+      variant="outline"
+      className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
+    >
+      {language === "en" ? "Request Custom Order" : "ልዩ ትዕዛዝ ይጠይቁ"}
+    </Button>
+  </Link>
               <Button
                 variant="outline"
                 className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
@@ -881,6 +884,7 @@ export default function ProductsPage() {
                 {language === "en" ? "View Portfolio" : "ፖርትፎሊዮ ይመልከቱ"}
               </Button>
             </div>
+            
           </div>
         </div>
       </section>
