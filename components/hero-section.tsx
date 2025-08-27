@@ -1,19 +1,30 @@
 "use client"
-
+import Link from "next/link"
 import { useLanguage } from "./language-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ArrowRight, Search, Play, BookOpen, Users, Award } from "lucide-react"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
+import ManuscriptProcess from "./manuscript-process"
+import ProductsSection from "./products-section"
 
 export default function HeroSection() {
   const { t, language } = useLanguage()
-  const [isMounted, setIsMounted] = useState(false)
+const [isMounted, setIsMounted] = useState(false)
+const [search, setSearch] = useState("")
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
+
+{/*const bb=["betty","ashe","fasika"]{const filterbb=bb.filter((bbs)=>{
+  bbs.toLowerCase search.includes()
+
+})*/}
+
+
+
+useEffect(() => {
+  setIsMounted(true)
+}, [])
 
   if (!isMounted) {
     return null
@@ -66,7 +77,10 @@ export default function HeroSection() {
     <Input
       type="text"
       placeholder={language === "en" ? "Search manuscripts..." : "ብራናዎችን ይፈልጉ..."}
+      value={search}
       className="flex-1 bg-transparent border-none text-white placeholder:text-white/60 text-sm pl-10 pr-4 py-2 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none"
+      onChange={(e) => setSearch(e.target.value)}
+
     />
 
     <div className="flex items-center space-x-1 pr-2">
@@ -91,6 +105,9 @@ export default function HeroSection() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
 
+
+           <Link href="/about">
+
                 <Button
                   variant="outline"
                   className="border-white/60 bg-black/20 text-white hover:bg-white/20 text-lg rounded-full backdrop-blur-sm shadow-lg"
@@ -98,6 +115,7 @@ export default function HeroSection() {
                   <Play className="mr-2 h-5 w-5" />
                   {language === "en" ? "Watch Our Story" : "ታሪካችንን ይመልከቱ"}
                 </Button>
+            </Link>
               </div>
 
               {/* Scroll Indicator */}

@@ -148,15 +148,7 @@ export default function ProductsSection() {
                     <CardContent className="flex-grow">
                       <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
                     </CardContent>
-                    <CardFooter>
-                      <Button
-                        variant="outline"
-                        className="w-full group border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
-                      >
-                        {t("learnMore")}
-                        <ChevronRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      </Button>
-                    </CardFooter>
+                    
                   </Card>
                 </motion.div>
               ))}

@@ -1,5 +1,5 @@
 "use client"
-
+import { useState } from "react"
 import { useLanguage } from "./language-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,6 +9,30 @@ import { MapPin, Phone, Mail } from "lucide-react"
 
 export default function ContactSection() {
   const { t } = useLanguage()
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      })
+      const data = await res.json()
+      alert(data.message)
+      setName("")
+      setEmail("")
+      setMessage("")
+    } catch (err) {
+      alert("Failed to send message.")
+    }
+    setLoading(false)
+  }
 
   return (
     <section id="contact" className="w-full py-12 md:py-24 lg:py-32 bg-white">
@@ -16,7 +40,6 @@ export default function ContactSection() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t("contact")}</h2>
-            
           </div>
           <div className="grid w-full max-w-5xl gap-6 md:grid-cols-2">
             <Card>
@@ -27,17 +50,36 @@ export default function ContactSection() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form className="grid gap-4">
+                <form className="grid gap-4" onSubmit={handleSubmit}>
                   <div className="grid gap-2">
-                    <Input placeholder="Name" />
+                    <Input
+                      placeholder="Name"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      required
+                    />
                   </div>
                   <div className="grid gap-2">
-                    <Input type="email" placeholder="Email" />
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      required
+                    />
                   </div>
                   <div className="grid gap-2">
-                    <Textarea placeholder="Message" className="min-h-[120px]" />
+                    <Textarea
+                      placeholder="Message"
+                      className="min-h-[120px]"
+                      value={message}
+                      onChange={e => setMessage(e.target.value)}
+                      required
+                    />
                   </div>
-                  <Button type="submit">Send Message</Button>
+                  <Button type="submit" disabled={loading}>
+                    {loading ? "Sending..." : "Send Message"}
+                  </Button>
                 </form>
               </CardContent>
             </Card>
@@ -70,7 +112,6 @@ export default function ContactSection() {
                   <div className="space-y-1">
                     <p className="text-sm font-medium leading-none">Email</p>
                     <p className="text-sm text-muted-foreground">
-                      {/* Placeholder content - will be replaced with actual content */}
                       info@brana.com
                     </p>
                   </div>

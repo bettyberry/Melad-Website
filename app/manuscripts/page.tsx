@@ -228,15 +228,7 @@ export default function ManuscriptsPage() {
         </div>
 
         <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium"
-          >
-            <Calendar className="h-4 w-4 mr-2" />
-            <span>{language === "en" ? "Established June 24, 2015" : "የተመሰረተው 2015 ሰኔ 24 ቀን ነው"}</span>
-          </motion.div>
+          
 
           <motion.h1
             initial={{ opacity: 0, y: -20 }}

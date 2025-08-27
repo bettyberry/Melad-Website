@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+
 import { useLanguage } from "./language-provider"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
@@ -143,6 +145,7 @@ export default function ServicesSection() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-center mt-16 md:mt-20"
         >
+       
           <Button className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group">
             <span className="mr-2">{language === "en" ? "View All Services" : "ሁሉንም አገልግሎቶች ይመልከቱ"}</span>
             <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />

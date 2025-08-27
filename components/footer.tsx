@@ -1,5 +1,5 @@
 "use client"
-
+import { useState } from "react"
 import { useLanguage } from "./language-provider"
 import Link from "next/link"
 import Image from "next/image"
@@ -9,6 +9,33 @@ import { Input } from "@/components/ui/input"
 
 export default function Footer() {
   const { t, language } = useLanguage()
+    const [email, setEmail] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setMessage("")
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setMessage(language === "en" ? "Subscribed successfully!" : "በተሳካ ሁኔታ ተመዝግበዋል!")
+        setEmail("")
+      } else {
+        setMessage(data.error || (language === "en" ? "Subscription failed." : "መመዝገብ አልተሳካም።"))
+      }
+    } catch {
+      setMessage(language === "en" ? "Subscription failed." : "መመዝገብ አልተሳካም።")
+    }
+    setLoading(false)
+  }
+
 
   const menuItems = [
     { key: "home", href: "/" },
@@ -37,18 +64,24 @@ export default function Footer() {
                   ? "Subscribe to our newsletter to receive updates on our latest manuscripts, events, and preservation efforts."
                   : "ስለ አዲስ ብራናዎቻችን፣ ዝግጅቶቻችን እና የጥበቃ ጥረቶቻችን ዝማኔዎችን ለመቀበል ለጋዜጣችን ይመዝገቡ።"}
               </p>
+              {message && (
+                <p className="text-white font-semibold mb-2">{message}</p>
+              )}
             </div>
 
-            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+            <form className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3" onSubmit={handleNewsletterSubmit}>
               <Input
                 type="email"
                 placeholder={language === "en" ? "Your email address" : "የኢሜይል አድራሻዎ"}
                 className="h-12 bg-white/20 border-white/10 text-white placeholder:text-white/60 focus:border-white focus:ring-white"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
               />
-              <Button className="h-12 px-6 bg-white text-primary hover:bg-white/90 font-medium">
-                {language === "en" ? "Subscribe" : "ይመዝገቡ"}
+              <Button className="h-12 px-6 bg-white text-primary hover:bg-white/90 font-medium" type="submit" disabled={loading}>
+                {loading ? (language === "en" ? "Subscribing..." : "በመመዝገብ ላይ...") : (language === "en" ? "Subscribe" : "ይመዝገቡ")}
               </Button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

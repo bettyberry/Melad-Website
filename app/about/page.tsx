@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+
 import { useLanguage } from "@/components/language-provider"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -576,9 +578,11 @@ export default function AboutPage() {
                 : "ማእከላችን በተጨማሪም በሐረግ ስራ፣ በመጻህፍት ድጉሰት፣ በእቃ ግዢ እና ሌሎች ድጋፍ ሰጪ ሰራተኞችን በሁሉም ስራዎቻችን ከፍተኛ ጥራት እንዲኖር ለማረጋገጥ ይይዛል።"}
             </p>
 
-            <Button className="mt-8 rounded-full bg-gradient-primary hover:opacity-90 shadow-md">
-              {language === "en" ? "Meet Our Team" : "ቡድናችንን ያግኙ"}
-            </Button>
+            <Link href="/contact">
+      <Button className="mt-8 rounded-full bg-gradient-primary hover:opacity-90 shadow-md">
+        {language === "en" ? "Meet Our Team" : "ቡድናችንን ያግኙ"}
+      </Button>
+    </Link>
           </motion.div>
         </div>
       </section>

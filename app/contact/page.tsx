@@ -811,10 +811,13 @@ export default function ContactPage() {
             <span>{language === "en" ? "Visit Us" : "ይጎብኙን"}</span>
           </div>
           
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3">
-            {language === "en" ? "Contact Our Team" : "ከቡድናችን ጋር ያግኙ"}
-          </h2>
-          
+          <h2
+  id="contact-team"
+  className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3"
+>
+  {language === "en" ? "Contact Our Team" : "ከቡድናችን ጋር ያግኙ"}
+</h2>
+
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

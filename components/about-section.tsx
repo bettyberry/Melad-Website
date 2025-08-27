@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link"
 
 import { useLanguage } from "./language-provider"
 import Image from "next/image"
@@ -81,10 +82,12 @@ export default function AboutSection() {
             </div>
 
             {/* CTA */}
-            <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base rounded-full">
-              {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+           <Link href="/about">
+      <Button className="bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base rounded-full">
+        {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </Button>
+    </Link>
           </motion.div>
 
           {/* Image */}
