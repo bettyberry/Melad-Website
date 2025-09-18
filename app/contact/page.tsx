@@ -157,33 +157,50 @@ export default function ContactPage() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  e.preventDefault()
+  setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...formData,
+        inquiryType: activeTab,
+      }),
+    })
 
+    if (response.ok) {
+      setSubmitSuccess(true)
+      // Reset form after success
+      setTimeout(() => {
+        setSubmitSuccess(false)
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+          organization: "",
+          contactPerson: "",
+          sponsorshipType: "",
+          projectType: "",
+          budget: "",
+        })
+      }, 3000)
+    } else {
+      throw new Error('Failed to send message')
+    }
+  } catch (error) {
+    console.error('Error sending message:', error)
+    alert(language === "en" ? "Failed to send message. Please try again." : "መልዕክት ላክ አልተቻለም። እባክዎ ደግመው ይሞክሩ።")
+  } finally {
     setIsSubmitting(false)
-    setSubmitSuccess(true)
-
-    // Reset form after success
-    setTimeout(() => {
-      setSubmitSuccess(false)
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-        organization: "",
-        contactPerson: "",
-        sponsorshipType: "",
-        projectType: "",
-        budget: "",
-      })
-    }, 3000)
   }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">

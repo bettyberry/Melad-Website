@@ -2,6 +2,11 @@
 
 import Link from "next/link"
 import { useState } from "react"
+
+import CartNotification from "@/components/Added-to-Cart"
+import { useRouter } from "next/navigation"
+
+
 import { useLanguage } from "@/components/language-provider"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
@@ -38,6 +43,9 @@ export default function ProductsPage() {
   const [favorites, setFavorites] = useState<number[]>([])
   const [cart, setCart] = useState<number[]>([])
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+const [notificationProduct, setNotificationProduct] = useState("")
+const router = useRouter()
 
   const categories = [
     { id: "all", label: language === "en" ? "All Products" : "ሁሉም ምርቶች", count: 24 },
@@ -222,9 +230,88 @@ export default function ProductsPage() {
     setFavorites((prev) => (prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]))
   }
 
-  const addToCart = (productId: number) => {
-    setCart((prev) => [...prev, productId])
+// Update the addToCart function in your page.tsx
+const addToCart = async (productId: number, productName: string) => {
+  try {
+    // Get the product details
+    const product = products.find(p => p.id === productId)
+    if (!product) return
+    
+    // Create cart item object
+    const cartItem = {
+      id: product.id.toString(),
+      productId: product.id.toString(),
+      title: product.title,
+      price: product.price,
+      image: product.image,
+      quantity: 1
+    }
+
+    // Update local storage first for instant UI response
+    const currentCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
+    
+    // Check if product already exists in cart
+    const existingItemIndex = currentCart.findIndex((item: any) => item.productId === product.id.toString())
+    
+    if (existingItemIndex >= 0) {
+      // Increase quantity if already in cart
+      currentCart[existingItemIndex].quantity += 1
+    } else {
+      // Add new item to cart
+      currentCart.push(cartItem)
+    }
+    
+    localStorage.setItem('cartItems', JSON.stringify(currentCart))
+    
+    // Update local state for UI
+    setCart(currentCart.map((item: any) => item.id))
+    
+    // Show notification
+    setNotificationProduct(productName)
+    setShowNotification(true)
+    
+    // Dispatch event to update header badge
+    window.dispatchEvent(new Event('cartUpdated'))
+    
+    // Sync with server if user is authenticated
+    if (status === "authenticated") {
+      try {
+        const res = await fetch("/api/cart/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            productId: product.id.toString(),
+            quantity: 1
+          }),
+        })
+        
+        if (!res.ok) {
+          console.error("Failed to sync cart with server")
+          // Revert local changes if server sync fails
+          const revertedCart = currentCart.filter((item: any) => 
+            item.productId !== product.id.toString() || 
+            (item.productId === product.id.toString() && item.quantity > 1) ?
+            {...item, quantity: item.quantity - 1} : null
+          )
+          localStorage.setItem('cartItems', JSON.stringify(revertedCart))
+          setCart(revertedCart.map((item: any) => item.id))
+        }
+      } catch (error) {
+        console.error("Error syncing cart with server:", error)
+        // Revert local changes on error
+        const revertedCart = currentCart.filter((item: any) => 
+          item.productId !== product.id.toString()
+        )
+        localStorage.setItem('cartItems', JSON.stringify(revertedCart))
+        setCart(revertedCart.map((item: any) => item.id))
+      }
+    }
+  } catch (error) {
+    console.error(error)
+    alert(language === "en" ? "Something went wrong" : "ስህተት ተፈጥሯል")
   }
+}
+
 
   const featuredProducts = products.filter((product) => product.featured)
 
@@ -265,11 +352,18 @@ export default function ProductsPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 mt-8"
           >
-            <Button
-             variant="outline"
-             className="h-12 px-8 bg-white text-primary  hover:bg-white/10 rounded-full text-base shadow-lg">
-              {language === "en" ? "Shop Now" : "አሁን ይግዙ"}
-            </Button>
+           <Button
+  variant="outline"
+  className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base shadow-lg"
+  onClick={() => {
+    const element = document.getElementById("featured-products");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }}
+>
+  {language === "en" ? "Shop Now" : "አሁን ይግዙ"}
+</Button>
             <Button
               variant="outline"
               className="h-12 px-8 border-white/30  text-primary  hover:bg-white/10 rounded-full text-base"
@@ -281,7 +375,7 @@ export default function ProductsPage() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-16 md:py-24 bg-white">
+<section id="featured-products" className="py-16 md:py-24 bg-white">
         <div className="container px-4 md:px-6">
           <div className="text-center mb-16">
             <motion.div
@@ -368,7 +462,7 @@ export default function ProductsPage() {
                     <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <Button
                         className="w-full bg-primary hover:bg-primary/90 text-white rounded-full"
-                        onClick={() => addToCart(product.id)}
+                        onClick={() => addToCart(product.id, product.title)}
                       >
                         <ShoppingCart className="mr-2 h-4 w-4" />
                         {language === "en" ? "Add to Cart" : "ወደ ጋሪ ጨምር"}
@@ -642,7 +736,7 @@ export default function ProductsPage() {
                                   <span className="text-sm text-slate-400 line-through">{product.originalPrice}</span>
                                 )}
                               </div>
-                              <Button size="sm" className="rounded-full" onClick={() => addToCart(product.id)}>
+                              <Button size="sm" className="rounded-full" onClick={() => addToCart(product.id, product.title)}>
                                 <ShoppingCart className="h-4 w-4" />
                               </Button>
                             </div>
@@ -713,7 +807,7 @@ export default function ProductsPage() {
                                       }`}
                                     />
                                   </Button>
-                                  <Button size="icon" className="rounded-full" onClick={() => addToCart(product.id)}>
+                                  <Button size="icon" className="rounded-full" onClick={() => addToCart(product.id, product.title)}>
                                     <ShoppingCart className="h-4 w-4" />
                                   </Button>
                                 </div>
@@ -832,7 +926,7 @@ export default function ProductsPage() {
                 <div className="flex space-x-4">
                   <Button
                     className="flex-1 bg-primary hover:bg-primary/90 text-white"
-                    onClick={() => addToCart(selectedProduct.id)}
+                    onClick={() => addToCart(selectedProduct.id, selectedProduct.title)}
                   >
                     <ShoppingCart className="mr-2 h-4 w-4" />
                     {language === "en" ? "Add to Cart" : "ወደ ጋሪ ጨምር"}

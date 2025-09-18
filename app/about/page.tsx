@@ -869,62 +869,67 @@ export default function AboutPage() {
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-primary/90 to-primary/70 text-white relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] bg-repeat"></div>
-        </div>
+      {/* Decorative elements */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] bg-repeat"></div>
+      </div>
 
-        <div className="container px-4 md:px-6 relative">
-          <div className="max-w-3xl mx-auto text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6"
-            >
-              {language === "en"
-                ? "Join Us in Preserving Ethiopia's Sacred Heritage"
-                : "የኢትዮጵያን ቅዱስ ቅርሳችንን በመጠበቅ ተባበሩን"}
-            </motion.h2>
+      <div className="container px-4 md:px-6 relative">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6"
+          >
+            {language === "en"
+              ? "Join Us in Preserving Ethiopia's Sacred Heritage"
+              : "የኢትዮጵያን ቅዱስ ቅርሳችንን በመጠበቅ ተባበሩን"}
+          </motion.h2>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-xl text-white/90 mb-8"
-            >
-              {language === "en"
-                ? "Partner with us to preserve and promote Ethiopia's ancient manuscript tradition for future generations."
-                : "የኢትዮጵያን ጥንታዊ የብራና ባህል ለወደፊት ትውልድ ለመጠበቅ እና ለማስፋፋት ከእኛ ጋር ተባበሩ።"}
-            </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-xl text-white/90 mb-8"
+          >
+            {language === "en"
+              ? "Partner with us to preserve and promote Ethiopia's ancient manuscript tradition for future generations."
+              : "የኢትዮጵያን ጥንታዊ የብራና ባህል ለወደፊት ትውልድ ለመጠበቅ እና ለማስፋፋት ከእኛ ጋር ተባበሩ።"}
+          </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex flex-wrap gap-4 justify-center"
-            >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-wrap gap-4 justify-center"
+          >
+            <Link href="/contact" className="w-full md:w-auto">
               <Button
                 variant="outline"
                 size="lg"
-                className="rounded-full bg-white text-primary  hover:bg-white/10 shadow-lg text-base py-6 px-8 h-auto"
+                className="rounded-full bg-white text-primary hover:bg-white/10 shadow-lg text-base py-3 px-8 h-auto"
               >
                 {language === "en" ? "Contact Us" : "ያግኙን"}
               </Button>
+            </Link>
+
+            <Link href="/learn-more" className="w-full md:w-auto">
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-full border-white text-primary hover:bg-white/10 text-base py-6 px-8 h-auto"
+                className="rounded-full border-white text-primary hover:bg-white/10 text-base py-3 px-8 h-auto"
               >
                 {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
               </Button>
-            </motion.div>
-          </div>
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </div>
+    </section>
     </div>
   )
 }

@@ -1,43 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import dbConnect from "@/lib/mongodb";
+import Subscriber from "@/models/Subscriber"; 
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const { email } = await request.json();
+    const { email } = await req.json();
 
-    if (!email || typeof email !== "string") {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "Email is required." },
+        { error: "Invalid email address" },
         { status: 400 }
       );
     }
 
-    const client = await clientPromise;
-    const db = client.db("melad");
-    const collection = db.collection("newsletter");
-
-    // Optional: Prevent duplicate subscriptions
-    const existing = await collection.findOne({ email });
+    await dbConnect();
+    const existing = await Subscriber.findOne({ email });
     if (existing) {
       return NextResponse.json(
-        { error: "This email is already subscribed." },
-        { status: 409 }
+        { error: "Email already subscribed" },
+        { status: 400 }
       );
     }
 
-    await collection.insertOne({
-      email,
-      subscribedAt: new Date(),
-    });
+    // Create subscriber
+    await Subscriber.create({ email });
 
-    return NextResponse.json(
-      { message: "Subscribed successfully!" },
-      { status: 201 }
-    );
-  } catch (error: any) {
+    return NextResponse.json({ message: "Subscribed successfully!" });
+  } catch (error) {
     console.error("Newsletter subscription error:", error);
     return NextResponse.json(
-      { error: "Internal server error", details: error.message },
+      { error: "Something went wrong" },
       { status: 500 }
     );
-  }}
+  }
+}

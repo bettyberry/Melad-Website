@@ -3,39 +3,57 @@ import { useState } from "react"
 import { useLanguage } from "./language-provider"
 import Link from "next/link"
 import Image from "next/image"
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ArrowRight } from "lucide-react"
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ArrowRight, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export default function Footer() {
   const { t, language } = useLanguage()
-    const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
+  const [isSubscribed, setIsSubscribed] = useState(false)
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setMessage("")
+    
+    // Simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setMessage(language === "en" ? "Please enter a valid email address." : "እባክዎ ትክክለኛ የኢሜይል አድራሻ ያስገቡ።")
+      setLoading(false)
+      return
+    }
+    
     try {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       })
+      
       const data = await res.json()
+      
       if (res.ok) {
         setMessage(language === "en" ? "Subscribed successfully!" : "በተሳካ ሁኔታ ተመዝግበዋል!")
+        setIsSubscribed(true)
         setEmail("")
+        
+        // Reset subscription status after 5 seconds
+        setTimeout(() => {
+          setIsSubscribed(false)
+        }, 5000)
       } else {
-        setMessage(data.error || (language === "en" ? "Subscription failed." : "መመዝገብ አልተሳካም።"))
+        setMessage(data.error || (language === "en" ? "Subscription failed. Please try again." : "መመዝገብ አልተሳካም። እባክዎ ደግመው ይሞክሩ።"))
       }
-    } catch {
-      setMessage(language === "en" ? "Subscription failed." : "መመዝገብ አልተሳካም።")
+    } catch (error) {
+      console.error("Subscription error:", error)
+      setMessage(language === "en" ? "Subscription failed. Please try again." : "መመዝገብ አልተሳካም። እባክዎ ደግመው ይሞክሩ።")
     }
     setLoading(false)
   }
-
 
   const menuItems = [
     { key: "home", href: "/" },
@@ -47,7 +65,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="w-full bg-slate-900 text-white">
+    <footer className="w-full bg-slate-900 text-white ml-9  mr-9">
       {/* Newsletter Section */}
       <div className="container py-12 md:py-16">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary to-primary/80 p-6 md:p-8 lg:p-12">
@@ -65,23 +83,36 @@ export default function Footer() {
                   : "ስለ አዲስ ብራናዎቻችን፣ ዝግጅቶቻችን እና የጥበቃ ጥረቶቻችን ዝማኔዎችን ለመቀበል ለጋዜጣችን ይመዝገቡ።"}
               </p>
               {message && (
-                <p className="text-white font-semibold mb-2">{message}</p>
+                <p className={`font-semibold mb-2 ${isSubscribed ? 'text-green-300' : 'text-red-300'}`}>
+                  {isSubscribed && <CheckCircle className="inline h-4 w-4 mr-1" />}
+                  {message}
+                </p>
               )}
             </div>
 
-            <form className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3" onSubmit={handleNewsletterSubmit}>
-              <Input
-                type="email"
-                placeholder={language === "en" ? "Your email address" : "የኢሜይል አድራሻዎ"}
-                className="h-12 bg-white/20 border-white/10 text-white placeholder:text-white/60 focus:border-white focus:ring-white"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-              />
-              <Button className="h-12 px-6 bg-white text-primary hover:bg-white/90 font-medium" type="submit" disabled={loading}>
-                {loading ? (language === "en" ? "Subscribing..." : "በመመዝገብ ላይ...") : (language === "en" ? "Subscribe" : "ይመዝገቡ")}
-              </Button>
-            </form>
+            {!isSubscribed ? (
+              <form className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3" onSubmit={handleNewsletterSubmit}>
+                <Input
+                  type="email"
+                  placeholder={language === "en" ? "Your email address" : "የኢሜይል አድራሻዎ"}
+                  className="h-12 bg-white/20 border-white/10 text-white placeholder:text-white/60 focus:border-white focus:ring-white"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                />
+                <Button className="h-12 px-6 bg-white text-primary hover:bg-white/90 font-medium" type="submit" disabled={loading}>
+                  {loading ? (language === "en" ? "Subscribing..." : "በመመዝገብ ላይ...") : (language === "en" ? "Subscribe" : "ይመዝገቡ")}
+                </Button>
+              </form>
+            ) : (
+              <div className="p-4 bg-white/10 rounded-lg text-center">
+                <CheckCircle className="h-12 w-12 text-green-300 mx-auto mb-3" />
+                <p className="text-white font-semibold">
+                  {language === "en" ? "Thank you for subscribing!" : "ለመመዝገብዎ እናመሰግናለን!"}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
