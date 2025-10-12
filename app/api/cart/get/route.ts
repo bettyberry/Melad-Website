@@ -1,51 +1,29 @@
 // app/api/cart/get/route.ts
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import connectDB from '@/lib/mongodb'
-import Cart from '@/models/Cart'
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "@/lib/get-server-session";
+import dbConnect from "@/lib/mongodb";
+import Cart from "@/models/Cart";
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const session = await getServerSession();
+    if (!session || !session.user) {
+      return NextResponse.json([], { status: 200 });
     }
 
-    await connectDB()
-
-    // Get user's cart
-    const cart = await Cart.findOne({ userId: session.user.id })
-      .populate('items.productId', 'name price images stock')
+    await dbConnect();
+    let cart = await Cart.findOne({ userId: session.user.id });
     
-    // If no cart exists, create an empty one
     if (!cart) {
-      const newCart = new Cart({
-        userId: session.user.id,
-        items: []
-      })
-      await newCart.save()
-      return NextResponse.json([])
+      cart = await Cart.create({ userId: session.user.id, items: [] });
     }
 
-    // Format the cart items
-    const formattedItems = cart.items.map(item => ({
-      id: item._id.toString(),
-      productId: item.productId._id.toString(),
-      title: item.name,
-      price: item.price,
-      image: item.image || (item.productId.images && item.productId.images[0]) || '/placeholder.svg',
-      quantity: item.quantity,
-      stock: item.productId.stock
-    }))
-
-    return NextResponse.json(formattedItems)
+    return NextResponse.json(cart.items, { status: 200 });
   } catch (error) {
-    console.error('Cart get error:', error)
+    console.error("Cart fetch error:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch cart' },
+      { error: "Failed to fetch cart" },
       { status: 500 }
-    )
+    );
   }
 }
