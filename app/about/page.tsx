@@ -51,7 +51,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
       {/* Hero Section */}
-      <section className="relative h-[55vh] min-h-[500px] w-full overflow-hidden">
+      <section className="relative h-screen min-h-[500px] w-full overflow-hidden">
   <div className="absolute inset-0">
     <div className="relative h-full w-full">
       <Image src="/images/manuscript-5.png" alt="About Melad" fill className="object-cover" priority />

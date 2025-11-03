@@ -15,10 +15,7 @@ const [isMounted, setIsMounted] = useState(false)
 const [search, setSearch] = useState("")
 
 
-{/*const bb=["betty","ashe","fasika"]{const filterbb=bb.filter((bbs)=>{
-  bbs.toLowerCase search.includes()
 
-})*/}
 
 
 

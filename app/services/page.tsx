@@ -198,57 +198,57 @@ export default function ServicesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
-      {/* Hero Section */}
-      <section className="relative h-[70vh] min-h-[600px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
-        <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 m mr-9">
+      <section className="relative h-screen w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+  <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
+  <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+  <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
 
-        <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
-      
+  <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
+    <motion.h1
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
+      className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl"
+    >
+      {language === "en"
+        ? "Preserving Heritage Through Expert Craftsmanship"
+        : "ቅርስን በባለሙያ ጥበብ መጠበቅ"}
+    </motion.h1>
 
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl"
-          >
-            {language === "en" ? "Preserving Heritage Through Expert Craftsmanship" : "ቅርስን በባለሙያ ጥበብ መጠበቅ"}
-          </motion.h1>
+    <motion.p
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      className="max-w-[800px] text-white/90 md:text-xl"
+    >
+      {language === "en"
+        ? "From manuscript creation to restoration, our comprehensive services preserve Ethiopia's ancient literary traditions with modern excellence."
+        : "ከብራና ፍጠራ እስከ እድሳት፣ ሰፊ አገልግሎቶቻችን የኢትዮጵያን ጥንታዊ የጽሑፍ ባህሎች በዘመናዊ ብቃት ይጠብቃሉ።"}
+    </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-[800px] text-white/90 md:text-xl"
-          >
-            {language === "en"
-              ? "From manuscript creation to restoration, our comprehensive services preserve Ethiopia's ancient literary traditions with modern excellence."
-              : "ከብራና ፍጠራ እስከ እድሳት፣ ሰፊ አገልግሎቶቻችን የኢትዮጵያን ጥንታዊ የጽሑፍ ባህሎች በዘመናዊ ብቃት ይጠብቃሉ።"}
-          </motion.p>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.3 }}
+      className="flex flex-col sm:flex-row gap-4 mt-8"
+    >
+      <Button
+        variant="outline"
+        className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base"
+      >
+        {language === "en" ? "View Our Services" : "አገልግሎቶቻችንን ይመልከቱ"}
+      </Button>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mt-8"
-          >
-           <Button
-              variant="outline"
-              className="h-12 px-8  bg-white text-primary hover:bg-white/10 rounded-full text-base"
-            >              {language === "en" ? "View Our Services" : "አገልግሎቶቻችንን ይመልከቱ"}
-            </Button>
-
-            <Button
-              variant="outline"
-              className="h-12 px-8  bg-white text-primary hover:bg-white/10 rounded-full text-base"
-            >
-              {language === "en" ? "Get Quote" : "ዋጋ ይጠይቁ"}
-            </Button>
-          </motion.div>
-        </div>
-      </section>
+      <Button
+        variant="outline"
+        className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base"
+      >
+        {language === "en" ? "Get Quote" : "ዋጋ ይጠይቁ"}
+      </Button>
+    </motion.div>
+  </div>
+</section>
 
       {/* Services Grid */}
      <section className="py-12 md:py-20 ml-10">
