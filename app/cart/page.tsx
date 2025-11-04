@@ -40,7 +40,7 @@ export default function CartPage() {
   
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-28">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />

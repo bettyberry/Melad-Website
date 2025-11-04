@@ -355,7 +355,7 @@ export default function ContactPage() {
         <Input
           value={formData.firstName}
           onChange={(e) => handleInputChange("firstName", e.target.value)}
-          placeholder={language === "en" ? "John" : "ዮሐንስ"}
+          placeholder={language === "en" ? "Michael" : "ዮሐንስ"}
           className="h-10 text-sm border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
           required
         />
@@ -368,7 +368,7 @@ export default function ContactPage() {
         <Input
           value={formData.lastName}
           onChange={(e) => handleInputChange("lastName", e.target.value)}
-          placeholder={language === "en" ? "Doe" : "ተስፋዬ"}
+          placeholder={language === "en" ? "Kumsa" : "ተስፋዬ"}
           className="h-10 text-sm border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
           required
         />

@@ -1,48 +1,43 @@
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import dbConnect from "@/lib/mongodb";
+import { NextRequest, NextResponse } from "next/server";
+import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
+import bcrypt from "bcryptjs";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
+    await connectDB();
+
     const body = await req.json();
     const { name, email, password } = body;
 
     if (!name || !email || !password) {
-      return NextResponse.json(
-        { error: "All fields are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Missing fields" }, { status: 400 });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const normalizedEmail = email.toLowerCase();
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "User already exists" }, { status: 400 });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Save new user
-    const newUser = await User.create({
+    const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
     });
 
     return NextResponse.json(
-      { message: "User created successfully", user: { id: newUser._id, name, email } },
+      {
+        message: "User created successfully",
+        user: { id: user._id, name: user.name, email: user.email },
+      },
       { status: 201 }
     );
-  } catch (error) {
-    console.error("Signup error:", error);
+  } catch (error: any) {
     return NextResponse.json(
-      { error: "Signup failed" },
+      { message: "Internal server error", error: error.message },
       { status: 500 }
     );
   }

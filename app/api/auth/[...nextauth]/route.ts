@@ -1,7 +1,6 @@
-// app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import dbConnect from "@/lib/mongodb";
+import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 
@@ -14,40 +13,25 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        await dbConnect();
+        await connectDB();
 
-        const user = await User.findOne({ email: credentials?.email });
-        if (!user) throw new Error("Invalid email or password");
+        if (!credentials?.email || !credentials?.password) return null;
 
-        const isValid = credentials?.password && await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) throw new Error("Invalid email or password");
+        // Normalize email
+        const email = credentials.email.toLowerCase();
+        const user = await User.findOne({ email });
+        if (!user) return null;
+
+        const isValid = await bcrypt.compare(credentials.password, user.password);
+        if (!isValid) return null;
 
         return { id: user._id.toString(), name: user.name, email: user.email };
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-      }
-      return session;
-    },
-  },
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  pages: {
-    signIn: "/",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
+  session: { strategy: "jwt" },
+  pages: { signIn: "/auth/signin" },
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);

@@ -1,11 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
-
-import CartNotification from "@/components/Added-to-Cart"
-import { useRouter } from "next/navigation"
-
+import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
 
 import { useLanguage } from "@/components/language-provider"
 import Image from "next/image"
@@ -30,10 +27,12 @@ import {
   ArrowRight,
   Sparkles,
   X,
+  CheckCircle,
 } from "lucide-react"
 
 export default function ProductsPage() {
   const { language } = useLanguage()
+  const { data: session, status } = useSession()
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sortBy, setSortBy] = useState("popular")
   const [filterCategory, setFilterCategory] = useState("all")
@@ -41,11 +40,16 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
   const [favorites, setFavorites] = useState<number[]>([])
-  const [cart, setCart] = useState<number[]>([])
+  const [cart, setCart] = useState<any[]>([])
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [showNotification, setShowNotification] = useState(false)
-const [notificationProduct, setNotificationProduct] = useState("")
-const router = useRouter()
+  const [notificationProduct, setNotificationProduct] = useState("")
+
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
+    setCart(savedCart)
+  }, [])
 
   const categories = [
     { id: "all", label: language === "en" ? "All Products" : "ሁሉም ምርቶች", count: 24 },
@@ -230,93 +234,104 @@ const router = useRouter()
     setFavorites((prev) => (prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]))
   }
 
-// Update the addToCart function in your page.tsx
-const addToCart = async (productId: number, productName: string) => {
-  try {
-    // Get the product details
-    const product = products.find(p => p.id === productId)
-    if (!product) return
-    
-    // Create cart item object
-    const cartItem = {
-      id: product.id.toString(),
-      productId: product.id.toString(),
-      title: product.title,
-      price: product.price,
-      image: product.image,
-      quantity: 1
-    }
-
-    // Update local storage first for instant UI response
-    const currentCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
-    
-    // Check if product already exists in cart
-    const existingItemIndex = currentCart.findIndex((item: any) => item.productId === product.id.toString())
-    
-    if (existingItemIndex >= 0) {
-      // Increase quantity if already in cart
-      currentCart[existingItemIndex].quantity += 1
-    } else {
-      // Add new item to cart
-      currentCart.push(cartItem)
-    }
-    
-    localStorage.setItem('cartItems', JSON.stringify(currentCart))
-    
-    // Update local state for UI
-    setCart(currentCart.map((item: any) => item.id))
-    
-    // Show notification
-    setNotificationProduct(productName)
-    setShowNotification(true)
-    
-    // Dispatch event to update header badge
-    window.dispatchEvent(new Event('cartUpdated'))
-    
-    // Sync with server if user is authenticated
-    if (status === "authenticated") {
-      try {
-        const res = await fetch("/api/cart/add", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            productId: product.id.toString(),
-            quantity: 1
-          }),
-        })
-        
-        if (!res.ok) {
-          console.error("Failed to sync cart with server")
-          // Revert local changes if server sync fails
-          const revertedCart = currentCart.filter((item: any) => 
-            item.productId !== product.id.toString() || 
-            (item.productId === product.id.toString() && item.quantity > 1) ?
-            {...item, quantity: item.quantity - 1} : null
-          )
-          localStorage.setItem('cartItems', JSON.stringify(revertedCart))
-          setCart(revertedCart.map((item: any) => item.id))
-        }
-      } catch (error) {
-        console.error("Error syncing cart with server:", error)
-        // Revert local changes on error
-        const revertedCart = currentCart.filter((item: any) => 
-          item.productId !== product.id.toString()
-        )
-        localStorage.setItem('cartItems', JSON.stringify(revertedCart))
-        setCart(revertedCart.map((item: any) => item.id))
+  // Add to Cart function
+  const addToCart = async (productId: number, productName: string) => {
+    try {
+      // Get the product details
+      const product = products.find(p => p.id === productId)
+      if (!product) return
+      
+      // Create cart item object
+      const cartItem = {
+        id: product.id.toString(),
+        productId: product.id.toString(),
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        quantity: 1
       }
-    }
-  } catch (error) {
-    console.error(error)
-    alert(language === "en" ? "Something went wrong" : "ስህተት ተፈጥሯል")
-  }
-}
 
+      // Update local storage first for instant UI response
+      const currentCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
+      
+      // Check if product already exists in cart
+      const existingItemIndex = currentCart.findIndex((item: any) => item.productId === product.id.toString())
+      
+      if (existingItemIndex >= 0) {
+        // Increase quantity if already in cart
+        currentCart[existingItemIndex].quantity += 1
+      } else {
+        // Add new item to cart
+        currentCart.push(cartItem)
+      }
+      
+      localStorage.setItem('cartItems', JSON.stringify(currentCart))
+      
+      // Update local state for UI
+      setCart(currentCart)
+      
+      // Show notification
+      setNotificationProduct(productName)
+      setShowNotification(true)
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        setShowNotification(false)
+      }, 3000)
+      
+      // Dispatch event to update header badge
+      window.dispatchEvent(new Event('cartUpdated'))
+      
+      // Sync with server if user is authenticated
+      if (status === "authenticated") {
+        try {
+          const res = await fetch("/api/cart/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              productId: product.id.toString(),
+              quantity: 1
+            }),
+          })
+          
+          if (!res.ok) {
+            console.error("Failed to sync cart with server")
+          }
+        } catch (error) {
+          console.error("Error syncing cart with server:", error)
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      alert(language === "en" ? "Something went wrong" : "ስህተት ተፈጥሯል")
+    }
+  }
 
   const featuredProducts = products.filter((product) => product.featured)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
+      {/* Cart Notification */}
+      <AnimatePresence>
+        {showNotification && (
+          <motion.div
+            initial={{ opacity: 0, y: -100, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -100, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3"
+          >
+            <CheckCircle className="h-6 w-6" />
+            <div>
+              <p className="font-semibold">
+                {language === "en" ? "Added to cart!" : "ወደ ጋሪ ታክሏል!"}
+              </p>
+              <p className="text-sm opacity-90">{notificationProduct}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Hero Section */}
       <section className="relative h-screen min-h-[500px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
         <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
@@ -324,8 +339,6 @@ const addToCart = async (productId: number, productName: string) => {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
 
         <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
-        
-
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -352,18 +365,18 @@ const addToCart = async (productId: number, productName: string) => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 mt-8"
           >
-           <Button
-  variant="outline"
-  className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base shadow-lg"
-  onClick={() => {
-    const element = document.getElementById("featured-products");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  }}
->
-  {language === "en" ? "Shop Now" : "አሁን ይግዙ"}
-</Button>
+            <Button
+              variant="outline"
+              className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base shadow-lg"
+              onClick={() => {
+                const element = document.getElementById("featured-products");
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              {language === "en" ? "Shop Now" : "አሁን ይግዙ"}
+            </Button>
             <Button
               variant="outline"
               className="h-12 px-8 border-white/30  text-primary  hover:bg-white/10 rounded-full text-base"
@@ -375,7 +388,7 @@ const addToCart = async (productId: number, productName: string) => {
       </section>
 
       {/* Featured Products */}
-<section id="featured-products" className="py-16 md:py-24 bg-white">
+      <section id="featured-products" className="py-16 md:py-24 bg-white">
         <div className="container px-4 md:px-6">
           <div className="text-center mb-16">
             <motion.div
@@ -434,7 +447,7 @@ const addToCart = async (productId: number, productName: string) => {
                         onClick={() => toggleFavorite(product.id)}
                       >
                         <Heart
-                          className={`h-4 w-4 {favorites.includes(product.id) ? "fill-red-500 text-red-500" : ""}`}
+                          className={`h-4 w-4 ${favorites.includes(product.id) ? "fill-red-500 text-red-500" : ""}`}
                         />
                       </Button>
                       <Button
@@ -476,7 +489,7 @@ const addToCart = async (productId: number, productName: string) => {
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-4 w-4 {
+                            className={`h-4 w-4 ${
                               i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
                             }`}
                           />
@@ -586,7 +599,7 @@ const addToCart = async (productId: number, productName: string) => {
 
           <div className="grid lg:grid-cols-4 gap-8">
             {/* Sidebar Filters */}
-            <div className={`lg:block {isFilterOpen ? "block" : "hidden"} space-y-6`}>
+            <div className={`lg:block ${isFilterOpen ? "block" : "hidden"} space-y-6`}>
               <Card className="p-6 border-0 shadow-lg">
                 <h3 className="text-lg font-bold text-slate-900 mb-4">{language === "en" ? "Categories" : "ምድቦች"}</h3>
                 <div className="space-y-2">
@@ -594,7 +607,7 @@ const addToCart = async (productId: number, productName: string) => {
                     <button
                       key={category.id}
                       onClick={() => setFilterCategory(category.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors {
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                         filterCategory === category.id
                           ? "bg-primary/10 text-primary"
                           : "text-slate-600 hover:bg-slate-100"
@@ -663,7 +676,7 @@ const addToCart = async (productId: number, productName: string) => {
                 </p>
                 {cart.length > 0 && (
                   <Badge variant="outline" className="text-primary border-primary">
-                    {cart.length} {language === "en" ? "items in cart" : "እቃዎች በጋሪ ውስጥ"}
+                    {cart.reduce((total, item) => total + item.quantity, 0)} {language === "en" ? "items in cart" : "እቃዎች በጋሪ ውስጥ"}
                   </Badge>
                 )}
               </div>
@@ -704,7 +717,7 @@ const addToCart = async (productId: number, productName: string) => {
                                 onClick={() => toggleFavorite(product.id)}
                               >
                                 <Heart
-                                  className={`h-4 w-4 {
+                                  className={`h-4 w-4 ${
                                     favorites.includes(product.id) ? "fill-red-500 text-red-500" : "text-white"
                                   }`}
                                 />
@@ -717,7 +730,7 @@ const addToCart = async (productId: number, productName: string) => {
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`h-3 w-3 {
+                                    className={`h-3 w-3 ${
                                       i < Math.floor(product.rating)
                                         ? "fill-yellow-400 text-yellow-400"
                                         : "text-gray-300"
@@ -763,7 +776,7 @@ const addToCart = async (productId: number, productName: string) => {
                                     {[...Array(5)].map((_, i) => (
                                       <Star
                                         key={i}
-                                        className={`h-3 w-3 {
+                                        className={`h-3 w-3 ${
                                           i < Math.floor(product.rating)
                                             ? "fill-yellow-400 text-yellow-400"
                                             : "text-gray-300"
@@ -802,7 +815,7 @@ const addToCart = async (productId: number, productName: string) => {
                                     onClick={() => toggleFavorite(product.id)}
                                   >
                                     <Heart
-                                      className={`h-4 w-4 {
+                                      className={`h-4 w-4 ${
                                         favorites.includes(product.id) ? "fill-red-500 text-red-500" : ""
                                       }`}
                                     />
@@ -892,7 +905,7 @@ const addToCart = async (productId: number, productName: string) => {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-5 w-5 {
+                      className={`h-5 w-5 ${
                         i < Math.floor(selectedProduct.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
                       }`}
                     />
@@ -933,7 +946,7 @@ const addToCart = async (productId: number, productName: string) => {
                   </Button>
                   <Button variant="outline" size="icon" onClick={() => toggleFavorite(selectedProduct.id)}>
                     <Heart
-                      className={`h-4 w-4 {favorites.includes(selectedProduct.id) ? "fill-red-500 text-red-500" : ""}`}
+                      className={`h-4 w-4 ${favorites.includes(selectedProduct.id) ? "fill-red-500 text-red-500" : ""}`}
                     />
                   </Button>
                   <Button variant="outline" size="icon">
@@ -964,13 +977,13 @@ const addToCart = async (productId: number, productName: string) => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/products">
-    <Button
-      variant="outline"
-      className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
-    >
-      {language === "en" ? "Request Custom Order" : "ልዩ ትዕዛዝ ይጠይቁ"}
-    </Button>
-  </Link>
+                <Button
+                  variant="outline"
+                  className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
+                >
+                  {language === "en" ? "Request Custom Order" : "ልዩ ትዕዛዝ ይጠይቁ"}
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
@@ -978,7 +991,6 @@ const addToCart = async (productId: number, productName: string) => {
                 {language === "en" ? "View Portfolio" : "ፖርትፎሊዮ ይመልከቱ"}
               </Button>
             </div>
-            
           </div>
         </div>
       </section>

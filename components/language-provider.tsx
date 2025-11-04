@@ -39,7 +39,6 @@ const translations: Record<Language, Record<string, string>> = {
     firstName: "First Name",
     firstNamePlaceholder: "John",
     lastName: "Last Name",
-    lastNamePlaceholder: "Doe",
     email: "Email",
     emailInputPlaceholder: "your@email.com",
     subject: "Subject",

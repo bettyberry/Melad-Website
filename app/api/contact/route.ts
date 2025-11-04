@@ -1,40 +1,28 @@
-import { NextRequest, NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import { NextRequest, NextResponse } from 'next/server';
+import connectDB from '@/lib/mongodb';
+import Contact from '@/models/contact';
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    // Parse JSON body
-    const body = await request.json();
+    const { name, email, message } = await req.json();
 
-    // Validate input (adjust fields to your form)
-    if (!body.name || !body.email || !body.message) {
+    if (!name || !email || !message) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: 'Name, email, and message are required' },
         { status: 400 }
       );
     }
 
-    //  Connect to MongoDB
-    const client = await clientPromise;
-    const db = client.db("melad");
-    const collection = db.collection("contacts");
+    await connectDB(); 
 
-    //  Insert document
-    const result = await collection.insertOne({
-      ...body,
-      createdAt: new Date(), 
+    const contact = await Contact.create({ name, email, message });
+
+    return NextResponse.json({
+      message: 'Message sent successfully!',
+      id: contact._id,
     });
-
-    return NextResponse.json(
-      { message: "Contact saved!", id: result.insertedId },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    console.error("❌ Error saving contact:", error);
-
-    return NextResponse.json(
-      { error: "Internal server error", details: error.message },
-      { status: 500 }
-    );
+  } catch (err) {
+    console.error('❌ Error saving contact:', err);
+    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
   }
 }

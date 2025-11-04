@@ -66,78 +66,81 @@ export default function Header() {
   }, [languageMenuOpen, userMenuOpen])
 
   useEffect(() => setIsOpen(false), [pathname])
-
-// In header.tsx, update the useEffect for login and handleLogout function
+// ✅ Sync cart when user logs in or logs out
 useEffect(() => {
+  // When user is logged in
   if (status === "authenticated" && session?.user) {
     const syncCart = async () => {
       try {
-        // Guest cart (localStorage)
-        const guestItems = JSON.parse(localStorage.getItem("cartItems") || "[]")
+        // 1️⃣ Get guest cart (from localStorage)
+        const guestItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
 
-        // Fetch DB cart
-        const res = await fetch("/api/cart/get")
-        let dbItems: any[] = []
-        if (res.ok) dbItems = await res.json()
+        // 2️⃣ Get user's saved cart from DB
+        const res = await fetch("/api/cart/get");
+        let dbItems = [];
+        if (res.ok) dbItems = await res.json();
 
-        // Merge carts: keep max quantities
-        const merged = [...dbItems]
+        // 3️⃣ If both are empty, no need to do anything
+        if (guestItems.length === 0 && dbItems.length === 0) return;
+
+        // 4️⃣ Merge carts (keep higher quantity if same item)
+        const merged = [...dbItems];
         for (const g of guestItems) {
-          const existing = merged.find((i) => i.id === g.id)
+          const existing = merged.find((i) => i.id === g.id);
           if (existing) {
-            existing.quantity = Math.max(existing.quantity, g.quantity)
+            existing.quantity = Math.max(existing.quantity, g.quantity);
           } else {
-            merged.push(g)
+            merged.push(g);
           }
         }
 
-        // Save merged cart to DB
+        // 5️⃣ Save merged cart to database
         await fetch("/api/cart/save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ items: merged }),
-        })
+        });
 
-        // Update localStorage + UI
-        localStorage.setItem("cartItems", JSON.stringify(merged))
-        window.dispatchEvent(new Event("cartUpdated"))
+        // 6️⃣ Update localStorage + UI
+        localStorage.setItem("cartItems", JSON.stringify(merged));
+        window.dispatchEvent(new Event("cartUpdated"));
       } catch (err) {
-        console.error("Failed to sync cart:", err)
+        console.error("Failed to sync cart:", err);
       }
-    }
+    };
 
-    syncCart()
+    syncCart();
+  } 
+  
+  else if (status === "unauthenticated") {
+    localStorage.removeItem("cartItems");
+    window.dispatchEvent(new Event("cartUpdated"));
   }
-}, [status, session])
+}, [status, session]);
+
+
+useEffect(() => {
+  const handleCartUpdate = () => {
+    const savedCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
+    setCart(savedCart)
+  }
+
+  // Listen for cart updates (including logout)
+  window.addEventListener('cartUpdated', handleCartUpdate)
+  
+  return () => {
+    window.removeEventListener('cartUpdated', handleCartUpdate)
+  }
+}, [])
 
 const handleLogout = async () => {
   setUserMenuOpen(false);
-  
-  // Save cart to database before logging out
-  try {
-    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-    if (cartItems.length > 0) {
-      await fetch('/api/cart/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ items: cartItems }),
-      });
-    }
-  } catch (error) {
-    console.error('Failed to save cart:', error);
-  }
-  
-  // Clear cart from localStorage
-  localStorage.removeItem('cartItems');
-  
-  // Dispatch event to update cart count
-  window.dispatchEvent(new Event('cartUpdated'));
-  
+  localStorage.removeItem("cartItems");
+  window.dispatchEvent(new Event("cartUpdated"));
   await signOut({ redirect: false });
-  router.refresh(); // Refresh the page to update the UI
+  router.refresh();
 };
+
 
   const menuItems = [
     { key: "home", href: "/" },
