@@ -13,12 +13,6 @@ export default function HeroSection() {
   const { t, language } = useLanguage()
 const [isMounted, setIsMounted] = useState(false)
 const [search, setSearch] = useState("")
-
-
-
-
-
-
 useEffect(() => {
   setIsMounted(true)
 }, [])
@@ -29,7 +23,7 @@ useEffect(() => {
 
   return (
     <div className="w-full">
-      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white pt-20">
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white pt-2">
         {/* Background Gradient */}
         <div className="absolute inset-0 z-0 w-full h-full bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70" />
 
