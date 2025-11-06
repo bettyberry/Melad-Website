@@ -22,3 +22,16 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ success: true });
 }
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ items: [] }, { status: 401 });
+  }
+
+  await connectDB();
+
+  const cart = await Cart.findOne({ userEmail: session.user.email });
+  return NextResponse.json({ items: cart?.items || [] });
+}

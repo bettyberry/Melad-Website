@@ -1,49 +1,74 @@
-import { NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Cart from "@/models/Cart";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import dbConnect from '@/lib/mongodb'
+import Cart from '@/models/Cart'
+import Product from '@/models/Product'
 
-// GET /api/cart - fetch current user's cart
-export async function GET(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const session = await getServerSession(authOptions)
+    
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    await dbConnect();
-
-    const cart = await Cart.findOne({ userEmail: session.user.email });
-    return NextResponse.json(cart || { items: [] });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Failed to fetch cart" }, { status: 500 });
-  }
-}
-
-// POST /api/cart - update cart
-export async function POST(req: Request) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { productId, quantity = 1 } = await req.json()
+    
+    if (!productId) {
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 })
     }
 
-    const body = await req.json();
-    const { items } = body;
+    await dbConnect()
 
-    await dbConnect();
+    // Get product details
+    const product = await Product.findById(productId)
+    if (!product) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
 
-    const cart = await Cart.findOneAndUpdate(
-      { userEmail: session.user.email },
-      { items },
-      { new: true, upsert: true }
-    );
+    // Find user's cart using userEmail (matching your existing route)
+    let cart = await Cart.findOne({ userEmail: session.user.email })
+    
+    // If cart doesn't exist, create one
+    if (!cart) {
+      cart = new Cart({
+        userEmail: session.user.email, // Using userEmail like your existing route
+        items: []
+      })
+    }
 
-    return NextResponse.json(cart);
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Failed to update cart" }, { status: 500 });
+    // Check if product already exists in cart
+    const existingItemIndex = cart.items.findIndex(
+      (item: any) => item.productId.toString() === productId
+    )
+
+    if (existingItemIndex > -1) {
+      // Update quantity if product exists
+      cart.items[existingItemIndex].quantity += quantity
+    } else {
+      // Add new item to cart
+      cart.items.push({
+        productId,
+        quantity,
+        name: product.name || product.title,
+        price: product.price,
+        image: product.images?.[0] || product.image
+      })
+    }
+
+    await cart.save()
+
+    return NextResponse.json({ 
+      success: true,
+      message: 'Product added to cart',
+      cart 
+    })
+  } catch (error) {
+    console.error('Cart add error:', error)
+    return NextResponse.json(
+      { error: 'Failed to add product to cart' },
+      { status: 500 }
+    )
   }
 }

@@ -233,79 +233,65 @@ export default function ProductsPage() {
   const toggleFavorite = (productId: number) => {
     setFavorites((prev) => (prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]))
   }
-
-  // Add to Cart function
-  const addToCart = async (productId: number, productName: string) => {
-    try {
-      // Get the product details
-      const product = products.find(p => p.id === productId)
-      if (!product) return
-      
-      // Create cart item object
-      const cartItem = {
-        id: product.id.toString(),
-        productId: product.id.toString(),
-        title: product.title,
-        price: product.price,
-        image: product.image,
-        quantity: 1
-      }
-
-      // Update local storage first for instant UI response
-      const currentCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
-      
-      // Check if product already exists in cart
-      const existingItemIndex = currentCart.findIndex((item: any) => item.productId === product.id.toString())
-      
-      if (existingItemIndex >= 0) {
-        // Increase quantity if already in cart
-        currentCart[existingItemIndex].quantity += 1
-      } else {
-        // Add new item to cart
-        currentCart.push(cartItem)
-      }
-      
-      localStorage.setItem('cartItems', JSON.stringify(currentCart))
-      
-      // Update local state for UI
-      setCart(currentCart)
-      
-      // Show notification
-      setNotificationProduct(productName)
-      setShowNotification(true)
-      
-      // Hide notification after 3 seconds
-      setTimeout(() => {
-        setShowNotification(false)
-      }, 3000)
-      
-      // Dispatch event to update header badge
-      window.dispatchEvent(new Event('cartUpdated'))
-      
-      // Sync with server if user is authenticated
-      if (status === "authenticated") {
-        try {
-          const res = await fetch("/api/cart/add", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-              productId: product.id.toString(),
-              quantity: 1
-            }),
-          })
-          
-          if (!res.ok) {
-            console.error("Failed to sync cart with server")
-          }
-        } catch (error) {
-          console.error("Error syncing cart with server:", error)
-        }
-      }
-    } catch (error) {
-      console.error(error)
-      alert(language === "en" ? "Something went wrong" : "ስህተት ተፈጥሯል")
+const addToCart = async (productId: number, productName: string) => {
+  try {
+    const product = products.find(p => p.id === productId)
+    if (!product) return
+    
+    const cartItem = {
+      id: product.id.toString(),
+      productId: product.id.toString(),
+      title: product.title,
+      price: product.price,
+      image: product.image,
+      quantity: 1
     }
+
+    // Update local storage
+    const currentCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
+    const existingItemIndex = currentCart.findIndex((item: any) => item.productId === product.id.toString())
+    
+    if (existingItemIndex >= 0) {
+      currentCart[existingItemIndex].quantity += 1
+    } else {
+      currentCart.push(cartItem)
+    }
+    
+    localStorage.setItem('cartItems', JSON.stringify(currentCart))
+    setCart(currentCart)
+    
+    // Show notification
+    setNotificationProduct(productName)
+    setShowNotification(true)
+    setTimeout(() => setShowNotification(false), 3000)
+    
+    // Dispatch event to update header badge
+    window.dispatchEvent(new Event('cartUpdated'))
+    
+    // Sync with server if user is authenticated
+    if (status === "authenticated") {
+      try {
+        const res = await fetch("/api/cart/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            productId: product.id.toString(),
+            quantity: 1
+          }),
+        })
+        
+        if (!res.ok) {
+          console.warn("Cart sync failed, but item saved locally")
+        }
+      } catch (error) {
+        console.warn("Cart sync error, but item saved locally:", error)
+      }
+    }
+  } catch (error) {
+    console.error("Add to cart error:", error)
+    alert(language === "en" ? "Something went wrong" : "ስህተት ተፈጥሯል")
   }
+}
 
   const featuredProducts = products.filter((product) => product.featured)
 
@@ -472,15 +458,26 @@ export default function ProductsPage() {
                     </div>
 
                     {/* Quick Add to Cart */}
-                    <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <Button
-                        className="w-full bg-primary hover:bg-primary/90 text-white rounded-full"
-                        onClick={() => addToCart(product.id, product.title)}
-                      >
-                        <ShoppingCart className="mr-2 h-4 w-4" />
-                        {language === "en" ? "Add to Cart" : "ወደ ጋሪ ጨምር"}
-                      </Button>
-                    </div>
+                    <div className="flex space-x-4">
+  <Button
+    className="flex-1 bg-primary hover:bg-primary/90 text-white"
+    onClick={() => {
+      addToCart(selectedProduct.id, selectedProduct.title)
+      setSelectedProduct(null) // optionally close modal after adding
+    }}
+  >
+    <ShoppingCart className="mr-2 h-5 w-5" />
+    {language === "en" ? "Add to Cart" : "ወደ ጋሪ ጨምር"}
+  </Button>
+  <Button
+    variant="outline"
+    className="flex-1"
+    onClick={() => setSelectedProduct(null)}
+  >
+    {language === "en" ? "Close" : "ዝጋ"}
+  </Button>
+</div>
+
                   </div>
 
                   <CardContent className="p-6">

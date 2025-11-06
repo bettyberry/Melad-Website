@@ -66,7 +66,6 @@ export default function Footer() {
 
   return (
     <footer className="w-full bg-slate-900 text-white ml-9  mr-9">
-      {/* Newsletter Section */}
       <div className="container py-12 md:py-16">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary to-primary/80 p-6 md:p-8 lg:p-12">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>

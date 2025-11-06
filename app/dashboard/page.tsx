@@ -55,7 +55,6 @@ function Sidebar() {
   );
 }
 
-// -------------------- Topbar --------------------
 function Topbar() {
   return (
     <header className="sticky top-0 bg-white border-b shadow-sm flex items-center justify-between px-6 py-3 z-10">
