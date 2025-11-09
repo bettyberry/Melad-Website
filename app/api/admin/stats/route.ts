@@ -1,17 +1,28 @@
+// app/api/admin/stats/route.ts
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Order from "@/models/Order";
-import Manuscript from "@/models/Manuscript";
+import { connectToDatabase } from "@/lib/mongodb";
 
 export async function GET() {
-  await dbConnect();
+  try {
+    const { db } = await connectToDatabase();
 
-  const totalOrders = await Order.countDocuments();
-  const revenueAgg = await Order.aggregate([{ $group: { _id: null, total: { $sum: "$amount" } } }]);
-  const revenue = revenueAgg[0]?.total || 0;
+    const totalOrders = await db.collection("orders").countDocuments();
+    const revenueAgg = await db.collection("orders").aggregate([
+      { $group: { _id: null, total: { $sum: "$amount" } } },
+    ]).toArray();
+    const revenue = revenueAgg[0]?.total || 0;
 
-  const totalManuscripts = await Manuscript.countDocuments();
-  const pendingOrders = await Order.countDocuments({ status: "Processing" });
+    const totalManuscripts = await db.collection("manuscripts").countDocuments();
+    const pendingOrders = await db.collection("orders").countDocuments({ status: "Processing" });
 
-  return NextResponse.json({ totalOrders, revenue, totalManuscripts, pendingOrders });
+    return NextResponse.json({
+      totalOrders,
+      revenue,
+      totalManuscripts,
+      pendingOrders,
+    });
+  } catch (error) {
+    console.error("Error in /api/admin/stats:", error);
+    return NextResponse.json({ error: "Failed to fetch admin stats" }, { status: 500 });
+  }
 }

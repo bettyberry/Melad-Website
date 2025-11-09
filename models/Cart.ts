@@ -1,31 +1,29 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema, model, models, Document } from "mongoose"
 
-const CartItemSchema = new mongoose.Schema({
-  productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    default: 1,
-    min: 1
-  },
-  name: String,
-  price: Number,
-  image: String
+interface CartItem {
+  productId: string
+  name: string
+  price: number
+  quantity: number
+}
+
+interface CartDocument extends Document {
+  userId: string
+  items: CartItem[]
+}
+
+const CartSchema = new Schema<CartDocument>({
+  userId: { type: String, required: true },
+  items: [
+    {
+      productId: String,
+      name: String,
+      price: Number,
+      quantity: Number,
+    },
+  ],
 })
 
-const CartSchema = new mongoose.Schema({
-  userEmail: {  // Changed from userId to userEmail to match your route
-    type: String,
-    required: true,
-    unique: true
-  },
-  items: [CartItemSchema]
-}, {
-  timestamps: true
-})
-
-export default mongoose.models.Cart || mongoose.model('Cart', CartSchema)
+const Cart = models.Cart || model<CartDocument>("Cart", CartSchema)
+export default Cart
+export type { CartItem, CartDocument }

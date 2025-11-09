@@ -67,7 +67,6 @@ export default function GalleryPage() {
   const [isSlideshow, setIsSlideshow] = useState(false)
   const [slideshowInterval, setSlideshowInterval] = useState<NodeJS.Timeout | null>(null)
 
-  // Gallery items data with enhanced metadata
   const galleryItems: GalleryItem[] = [
     {
       id: 1,
@@ -197,8 +196,7 @@ export default function GalleryPage() {
       dimensions: "24 x 34 cm",
       tags: ["parchment", "traditional", "authentic", "melad"],
       likes: 112,
-      views: 1890,
-    },
+      views: 1980,},
     {
       id: 8,
       src: "/images/manuscript-page.png",
@@ -238,7 +236,6 @@ export default function GalleryPage() {
     },
   ]
 
-  // Filter gallery items based on selected category and search
   const filteredItems = galleryItems.filter((item) => {
     const matchesCategory = filter === "all" || item.category === filter
     const matchesSearch =
@@ -250,10 +247,8 @@ export default function GalleryPage() {
     return matchesCategory && matchesSearch
   })
 
-  // Featured items for the hero section
   const featuredItems = galleryItems.filter((item) => item.featured)
 
-  // Categories for filtering
   const categories = [
     { id: "all", label: language === "en" ? "All" : "ሁሉም", count: galleryItems.length },
     {
@@ -283,33 +278,28 @@ export default function GalleryPage() {
     },
   ]
 
-  // Handle image click to open modal
   const handleImageClick = (item: GalleryItem) => {
     setSelectedImage(item)
     const index = galleryItems.findIndex((i) => i.id === item.id)
     setCurrentIndex(index)
   }
 
-  // Navigate to next image in modal
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % galleryItems.length
     setCurrentIndex(nextIndex)
     setSelectedImage(galleryItems[nextIndex])
   }
 
-  // Navigate to previous image in modal
   const handlePrevious = () => {
     const prevIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length
     setCurrentIndex(prevIndex)
     setSelectedImage(galleryItems[prevIndex])
   }
 
-  // Toggle favorite
   const toggleFavorite = (itemId: number) => {
     setFavorites((prev) => (prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId]))
   }
 
-  // Slideshow controls
   const startSlideshow = () => {
     setIsSlideshow(true)
     const interval = setInterval(() => {
@@ -326,12 +316,10 @@ export default function GalleryPage() {
     }
   }
 
-  // Set loaded state after component mounts
   useEffect(() => {
     setIsLoaded(true)
   }, [])
 
-  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedImage) {
@@ -359,7 +347,6 @@ export default function GalleryPage() {
     }
   }, [selectedImage, currentIndex, isSlideshow])
 
-  // Cleanup slideshow on unmount
   useEffect(() => {
     return () => {
       if (slideshowInterval) {
@@ -368,7 +355,6 @@ export default function GalleryPage() {
     }
   }, [slideshowInterval])
 
-  // Animation variants for staggered loading
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -385,8 +371,7 @@ export default function GalleryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ">
       <section className="relative h-screen min-h-[500px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
         <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
@@ -431,12 +416,12 @@ export default function GalleryPage() {
           >
            <Button
               variant="outline"
-              className="h-12 px-8  bg-white text-primary hover:bg-white/10 rounded-full text-base"
+              className="h-12 px-8  bg-white text-primary hover:bg-white/10 rounded-full text-base mt-10"
             >              {language === "en" ? "Explore Gallery" : "ማዕከለ-ስዕላት ይመልከቱ"}
             </Button>
             <Button
-              variant="outline"
-              className="h-12 px-8  bg-white text-primary hover:bg-white/10 rounded-full text-base"
+             variant="ghost"
+        className="h-12 px-8 text-white hover:bg-white/10 rounded-full text-base border border-white mt-10"
             >
               {language === "en" ? "Virtual Tour" : "ምናባዊ ጉብኝት"}
             </Button>
@@ -512,7 +497,6 @@ export default function GalleryPage() {
                             </div>
                             <div className="flex items-center space-x-1">
                               <Heart className="h-3 w-3" />
-                              <span>{item.likes}</span>
                             </div>
                           </div>
                           <Button size="sm" variant="outline" className="border-white/30 text-white hover:bg-white/20">
@@ -743,7 +727,6 @@ export default function GalleryPage() {
                               </div>
                               <div className="flex items-center space-x-1">
                                 <Heart className="h-3 w-3" />
-                                <span>{item.likes}</span>
                               </div>
                             </div>
                           </div>
@@ -943,8 +926,6 @@ export default function GalleryPage() {
                             <span>{selectedImage.views}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-white/70">{language === "en" ? "Likes:" : "ወዳጆች:"}</span>
-                            <span>{selectedImage.likes}</span>
                           </div>
                         </div>
                       </div>
@@ -991,12 +972,7 @@ export default function GalleryPage() {
                   : "በጥንቃቄ ሰነድ አያያዝ እና ዲጂታል ጥበቃ በኩል፣ እነዚህ የባህል ሀብቶች ታሪካዊ ትክክለኛነታቸውን በመጠበቅ ለወደፊት ትውልዶች ተደራሽ እንዲሆኑ እናረጋግጣለን።"}
               </p>
 
-              <div className="flex items-center space-x-2 text-primary">
-                <Calendar className="h-5 w-5" />
-                <span className="font-medium">
-                  {language === "en" ? "Updated regularly with new acquisitions" : "በአዲስ ስብስቦች በመደበኛነት ይዘምናል"}
-                </span>
-              </div>
+              
             </div>
 
             <div className="relative">
@@ -1061,12 +1037,7 @@ export default function GalleryPage() {
               className="h-12 px-8 border-white/30 text-primary hover:bg-white/10  rounded-full text-base">
                 {language === "en" ? "Visit Our Center" : "ማዕከላችንን ይጎብኙ"}
               </Button>
-              <Button
-                variant="outline"
-                className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
-              >
-                {language === "en" ? "Download Catalog" : "ካታሎግ ያውርዱ"}
-              </Button>
+              
             </div>
           </div>
         </div>

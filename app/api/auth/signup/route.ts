@@ -1,44 +1,55 @@
-import { NextRequest, NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
-import User from "@/models/User";
-import bcrypt from "bcryptjs";
+// app/api/auth/signup/route.ts
+import { NextRequest, NextResponse } from "next/server"
+import { createUser, findUserByEmail, hashPassword } from "@/models/User"
 
 export async function POST(req: NextRequest) {
   try {
-    await connectDB();
+    const { name, email, password } = await req.json()
 
-    const body = await req.json();
-    const { name, email, password } = body;
-
+    // Validate input
     if (!name || !email || !password) {
-      return NextResponse.json({ message: "Missing fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      )
     }
 
-    const normalizedEmail = email.toLowerCase();
-    const existingUser = await User.findOne({ email: normalizedEmail });
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters" },
+        { status: 400 }
+      )
+    }
+
+    // Check if user already exists
+    const existingUser = await findUserByEmail(email)
     if (existingUser) {
-      return NextResponse.json({ message: "User already exists" }, { status: 400 });
+      return NextResponse.json(
+        { error: "User already exists with this email" },
+        { status: 409 }
+      )
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Hash password
+    const hashedPassword = await hashPassword(password)
 
-    const user = await User.create({
-      name,
-      email: normalizedEmail,
+    // Create user
+    const user = await createUser({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
       password: hashedPassword,
-    });
+      role: "user"
+    })
 
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = user
+    return NextResponse.json(userWithoutPassword, { status: 201 })
+    
+  } catch (error) {
+    console.error("Signup error:", error)
     return NextResponse.json(
-      {
-        message: "User created successfully",
-        user: { id: user._id, name: user.name, email: user.email },
-      },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Internal server error", error: error.message },
+      { error: "Internal server error" },
       { status: 500 }
-    );
+    )
   }
 }

@@ -65,7 +65,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="w-full bg-slate-900 text-white ml-9  mr-9">
+    <footer className="w-full bg-slate-900 text-white ">
       <div className="container py-12 md:py-16">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary to-primary/80 p-6 md:p-8 lg:p-12">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
@@ -122,9 +122,15 @@ export default function Footer() {
           {/* Logo and About */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center space-x-3 mb-6">
-              <div className="relative h-12 w-12">
-                <Image src="/images/brana-logo.png" alt="ብራና Logo" fill className="object-contain" />
-              </div>
+              <div className="relative w-12 h-12 rounded-full overflow-hidden">
+  <Image
+    src="/images/brana-logo.png"
+    alt="Logo"
+    fill
+    className="object-cover"
+  />
+</div>
+
               <div>
                 <span className="block text-xl font-bold text-primary">ብራና</span>
                 <span className="block text-sm text-slate-400">Melad Ancient Parchment</span>

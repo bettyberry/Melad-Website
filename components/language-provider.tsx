@@ -133,6 +133,8 @@ const translations: Record<Language, Record<string, string>> = {
     services: "አገልግሎቶች",
     products: "ምርቶች",
     gallery: "ማዕከለ-ስዕላት",
+    more: "ተጨማሪ", 
+
     contact: "ያግኙን",
     heroTitle: "የጥንታዊ ኢትዮጵያዊ ጽሑፎችን መጠበቅ",
     heroSubtitle:

@@ -71,7 +71,6 @@ export default function GallerySection() {
     },
   ]
 
-  // Handle navigation in lightbox
   const handlePrevious = () => {
     if (selectedImage === null) return
     setSelectedImage(selectedImage === 0 ? galleryItems.length - 1 : selectedImage - 1)
@@ -83,7 +82,8 @@ export default function GallerySection() {
   }
 
   return (
-    <section id="gallery" className="w-full py-16 md:py-24 lg:py-32 bg-slate-50">
+    <section id="gallery"   className="relative w-full h-screen min-h-[500px] bg-gray-100 flex items-center justify-center"
+>
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <motion.div
@@ -93,14 +93,16 @@ export default function GallerySection() {
             transition={{ duration: 0.5 }}
             className="space-y-2"
           >
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t("gallery")}</h2>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+           
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">{t("gallery")}</h2>
+            <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl">
               {language === "en"
                 ? "Explore our collection of authentic Ethiopian manuscripts, created using traditional techniques passed down through generations."
                 : "ከትውልድ ወደ ትውልድ በተላለፉ ባህላዊ ቴክኒኮች የተሰሩ እውነተኛ የኢትዮጵያ ብራናዎች ስብስባችንን ይመልከቱ።"}
             </p>
           </motion.div>
 
+          {/* Gallery Grid */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 w-full max-w-5xl mt-8">
             {galleryItems.map((item, index) => (
               <motion.div
@@ -139,11 +141,11 @@ export default function GallerySection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="mt-10"
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-12 flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link href="/manuscripts">
-              <Button className="bg-gradient-primary hover:opacity-90 rounded-full px-8 shadow-md">
+              <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-8 shadow-md">
                 {language === "en" ? "View All Manuscripts" : "ሁሉንም ብራናዎች ይመልከቱ"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -152,31 +154,29 @@ export default function GallerySection() {
         </div>
       </div>
 
-      {/* Image Modal/Lightbox */}
+      {/* Image Modal */}
       <Dialog open={selectedImage !== null} onOpenChange={(open) => !open && setSelectedImage(null)}>
         <DialogContent className="max-w-5xl p-0 bg-transparent border-0 shadow-none">
-          <div className="relative bg-black/95 rounded-lg overflow-hidden">
-            {/* Close button */}
-            <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-black/50 p-2 text-white hover:bg-black/70">
-              <X className="h-5 w-5" />
-            </DialogClose>
+          {selectedImage !== null && (
+            <div className="relative bg-black/95 rounded-lg overflow-hidden">
+              <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-black/50 p-2 text-white hover:bg-black/70">
+                <X className="h-5 w-5" />
+              </DialogClose>
 
-            {/* Navigation buttons */}
-            <button
-              onClick={handlePrevious}
-              className="absolute left-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white hover:bg-black/70"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={handleNext}
-              className="absolute right-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white hover:bg-black/70"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
+              {/* Navigation */}
+              <button
+                onClick={handlePrevious}
+                className="absolute left-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white hover:bg-black/70"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="absolute right-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white hover:bg-black/70"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
 
-            {/* Image */}
-            {selectedImage !== null && (
               <div className="flex flex-col">
                 <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] w-full">
                   <Image
@@ -187,7 +187,6 @@ export default function GallerySection() {
                   />
                 </div>
 
-                {/* Image info */}
                 <div className="bg-black p-4 sm:p-6 text-white">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
@@ -203,8 +202,8 @@ export default function GallerySection() {
                   </div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </section>

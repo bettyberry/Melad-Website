@@ -1,74 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import dbConnect from '@/lib/mongodb'
-import Cart from '@/models/Cart'
-import Product from '@/models/Product'
 
-export async function POST(req: NextRequest) {
+// Simple in-memory storage for demo - replace with your database
+let cartStorage: Record<string, { items: any[] }> = {}
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const userId = searchParams.get('userId')
+
+  if (!userId) {
+    return NextResponse.json({ error: 'User ID required' }, { status: 400 })
+  }
+
+  // Return user's cart or empty cart if not found
+  const userCart = cartStorage[userId] || { items: [] }
+  return NextResponse.json(userCart)
+}
+
+export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session || !session.user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const body = await request.json()
+    const { userId, items } = body
+
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID required' }, { status: 400 })
     }
 
-    const { productId, quantity = 1 } = await req.json()
-    
-    if (!productId) {
-      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 })
-    }
+    // Save or update user's cart
+    cartStorage[userId] = { items: items || [] }
 
-    await dbConnect()
-
-    // Get product details
-    const product = await Product.findById(productId)
-    if (!product) {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
-    }
-
-    // Find user's cart using userEmail (matching your existing route)
-    let cart = await Cart.findOne({ userEmail: session.user.email })
-    
-    // If cart doesn't exist, create one
-    if (!cart) {
-      cart = new Cart({
-        userEmail: session.user.email, // Using userEmail like your existing route
-        items: []
-      })
-    }
-
-    // Check if product already exists in cart
-    const existingItemIndex = cart.items.findIndex(
-      (item: any) => item.productId.toString() === productId
-    )
-
-    if (existingItemIndex > -1) {
-      // Update quantity if product exists
-      cart.items[existingItemIndex].quantity += quantity
-    } else {
-      // Add new item to cart
-      cart.items.push({
-        productId,
-        quantity,
-        name: product.name || product.title,
-        price: product.price,
-        image: product.images?.[0] || product.image
-      })
-    }
-
-    await cart.save()
-
-    return NextResponse.json({ 
-      success: true,
-      message: 'Product added to cart',
-      cart 
-    })
+    return NextResponse.json({ success: true, items: items || [] })
   } catch (error) {
-    console.error('Cart add error:', error)
-    return NextResponse.json(
-      { error: 'Failed to add product to cart' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to save cart' }, { status: 500 })
   }
 }

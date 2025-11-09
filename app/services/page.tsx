@@ -209,7 +209,7 @@ export default function ServicesPage() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.1 }}
-      className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl"
+      className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl mb-6"
     >
       {language === "en"
         ? "Preserving Heritage Through Expert Craftsmanship"
@@ -220,7 +220,7 @@ export default function ServicesPage() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
-      className="max-w-[800px] text-white/90 md:text-xl"
+      className="max-w-[800px] text-white/90 md:text-xl "
     >
       {language === "en"
         ? "From manuscript creation to restoration, our comprehensive services preserve Ethiopia's ancient literary traditions with modern excellence."
@@ -231,18 +231,18 @@ export default function ServicesPage() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 }}
-      className="flex flex-col sm:flex-row gap-4 mt-8"
+      className="flex flex-col sm:flex-row gap-4 "
     >
       <Button
         variant="outline"
-        className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base"
+        className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base mt-16 "
       >
         {language === "en" ? "View Our Services" : "አገልግሎቶቻችንን ይመልከቱ"}
       </Button>
 
       <Button
-        variant="outline"
-        className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base"
+         variant="ghost"
+        className="h-12 px-8 text-white hover:bg-white/10 rounded-full text-base border border-white mt-16"
       >
         {language === "en" ? "Get Quote" : "ዋጋ ይጠይቁ"}
       </Button>

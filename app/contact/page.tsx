@@ -174,7 +174,6 @@ export default function ContactPage() {
 
     if (response.ok) {
       setSubmitSuccess(true)
-      // Reset form after success
       setTimeout(() => {
         setSubmitSuccess(false)
         setFormData({
@@ -204,58 +203,59 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
-      {/* Hero Section */}
-      <section className="relative h-screen min-h-[500px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
-        <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
+    <section className="relative h-screen min-h-[500px] w-full overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+  <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] opacity-10"></div>
+  <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
+  <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/3 blur-3xl"></div>
 
-        <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4 ">
-          
+  <div className="container relative z-10 flex h-full flex-col items-center justify-center space-y-6 text-center px-4">
+    <motion.h1
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
+      className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl"
+    >
+      {language === "en"
+        ? "Let's Create Something Beautiful Together"
+        : "አብረን ውብ ነገር እንፍጠር"}
+    </motion.h1>
 
-          <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl"
-          >
-            {language === "en" ? "Let's Create Something Beautiful Together" : "አብረን ውብ ነገር እንፍጠር"}
-          </motion.h1>
+    <motion.p
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      className="max-w-[800px] text-white/90 md:text-xl"
+    >
+      {language === "en"
+        ? "Whether you need a custom manuscript, want to support our mission, or have questions about our services, we're here to help."
+        : "ልዩ ብራና ይፈልጉ፣ ተልእኮአችንን መደገፍ ይፈልጉ፣ ወይም ስለ አገልግሎቶቻችን ጥያቄዎች ካሉዎት፣ ለመርዳት እዚህ ነን።"}
+    </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-[800px] text-white/90 md:text-xl"
-          >
-            {language === "en"
-              ? "Whether you need a custom manuscript, want to support our mission, or have questions about our services, we're here to help."
-              : "ልዩ ብራና ይፈልጉ፣ ተልእኮአችንን መደገፍ ይፈልጉ፣ ወይም ስለ አገልግሎቶቻችን ጥያቄዎች ካሉዎት፣ ለመርዳት እዚህ ነን።"}
-          </motion.p>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.3 }}
+      className="flex flex-col sm:flex-row gap-4 mt-8"
+    >
+      {/* Start Conversation Button (filled outline) */}
+      <Button
+        variant="outline"
+        className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
+      >
+        {language === "en" ? "Start Conversation" : "ውይይት ይጀምሩ"}
+      </Button>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mt-8"
-          >
-            <Button 
-            variant="outline"
+      <Button
+        variant="ghost"
+        className="h-12 px-8 text-white hover:bg-white/10 rounded-full text-base border border-white"
+      >
+        {language === "en" ? "Schedule Visit" : "ጉብኝት ያቅዱ"}
+      </Button>
+    </motion.div>
+  </div>
+</section>
 
-              className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base">
-              {language === "en" ? "Start Conversation" : "ውይይት ይጀምሩ"}
-            </Button>
-            <Button
-              variant="outline"
-              className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
-            >
-              {language === "en" ? "Schedule Visit" : "ጉብኝት ያቅዱ"}
-            </Button>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Contact Reasons */}
       <section className="py-8 md:py-4 bg-white">
   <div className="container px-4 md:px-6">
     <div className="text-center mb-8">
@@ -323,7 +323,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Contact Form */}
       <section className="py-16 md:py-24 bg-slate-50">
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
@@ -810,11 +809,9 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-{/* Contact Information & Hours - Professional Compact Version */}
 <section className="py-12 md:py-20 bg-white">
   <div className="container px-4 mx-auto max-w-6xl">
     <div className="grid lg:grid-cols-2 gap-8 md:gap-10">
-      {/* Contact Information */}
       <div>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -972,17 +969,11 @@ export default function ContactPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-              variant="outline"
-
-              className="h-12 px-8 bg-white text-primary hover:bg-white/90 rounded-full text-base">
+                     variant="outline"
+        className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base">
                 {language === "en" ? "Schedule a Visit" : "ጉብኝት ያቅዱ"}
               </Button>
-              <Button
-                variant="outline"
-                className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
-              >
-                {language === "en" ? "Download Brochure" : "ብሮሹር ያውርዱ"}
-              </Button>
+            
             </div>
           </div>
         </div>

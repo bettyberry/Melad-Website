@@ -11,15 +11,13 @@ export default function AboutSection() {
   const { t, language } = useLanguage()
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden ml-9 mr-8">
-      {/* Background Pattern */}
+    <section className="py-20 bg-white relative overflow-hidden  width-full">
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0 bg-[url('/images/manuscript-pattern.png')] bg-repeat"></div>
       </div>
 
       <div className="container px-4 md:px-6 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -27,7 +25,6 @@ export default function AboutSection() {
             transition={{ duration: 0.8 }}
             className="text-gray-900"
           >
-            {/* Badge */}
             <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               <History className="h-4 w-4 mr-2" />
               <span>{language === "en" ? "Our History" : "ታሪካችን"}</span>

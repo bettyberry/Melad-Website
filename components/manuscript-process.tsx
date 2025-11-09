@@ -1,142 +1,212 @@
 "use client"
 
 import { useLanguage } from "./language-provider"
-import { motion } from "framer-motion"
-import { BookOpen, Compass, Paintbrush, History } from "lucide-react"
 import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion"
+import { ArrowRight, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog"
 
-export default function ManuscriptProcess() {
-  const { language } = useLanguage()
+export default function GallerySection() {
+  const { t, language } = useLanguage()
+  const [selectedImage, setSelectedImage] = useState<number | null>(null)
 
-  const processSteps = [
+  const galleryItems = [
     {
-      icon: <Compass className="h-6 w-6" />,
-      title: language === "en" ? "Material Selection" : "የቁሳቁስ ምርጫ",
+      src: "/images/manuscript-open1.png",
+      alt: "Illuminated Ethiopian Manuscript",
+      title: language === "en" ? "Illuminated Religious Text" : "በሐረግ የተሰራ ሃይማኖታዊ ጽሑፍ",
       description:
         language === "en"
-          ? "Carefully selecting the finest goat leather for parchment preparation, ensuring authentic materials for each manuscript."
-          : "ለብራና ዝግጅት ምርጥ የፍየል ቆዳን በጥንቃቄ መምረጥ፣ ለእያንዳንዱ መጽሐፍ ትክክለኛ ቁሳቁሶችን ማረጋገጥ።",
+          ? "A beautifully illuminated Ethiopian manuscript showing the Dormition of Mary with disciples, featuring traditional Ge'ez text with red and black ink."
+          : "የቅድስት ማርያምን ዕረፍት ከደቀ መዛሙርት ጋር የሚያሳይ በሚያምር ሁኔታ የተሰራ የኢትዮጵያ ብራና፣ በቀይና ጥቁር ቀለም የተጻፈ ባህላዊ የግዕዝ ጽሑፍን ያካተተ።",
     },
     {
-      icon: <BookOpen className="h-6 w-6" />,
-      title: language === "en" ? "Script Preparation" : "የጽሑፍ ዝግጅት",
+      src: "/images/manuscript-crucifixion.png",
+      alt: "Crucifixion Illumination",
+      title: language === "en" ? "Crucifixion Scene" : "የመስቀል ላይ ስቃይ ትዕይንት",
       description:
         language === "en"
-          ? "Master scribes carefully write ancient Ge'ez texts using traditional techniques and natural inks."
-          : "ብቁ ጸሐፊዎች ባህላዊ ቴክኒኮችን እና ተፈጥሯዊ ቀለሞችን በመጠቀም ጥንታዊ የግእዝ ጽሑፎችን በጥንቃቄ ይጽፋሉ።",
+          ? "A vibrant illumination depicting the Crucifixion with Mary and John, surrounded by decorative borders and Ge'ez text below."
+          : "ቅድስት ማርያምንና ዮሐንስን ከመስቀሉ አጠገብ በሚያሳይ ደማቅ ስዕል፣ በጌጣጌጥ ድንበሮች የተከበበ እና ከታች የግዕዝ ጽሑፍ ያለው።",
     },
     {
-      icon: <Paintbrush className="h-6 w-6" />,
-      title: language === "en" ? "Illumination" : "ሐረግና ጌጣጌጥ",
+      src: "/images/manuscript-open2.png",
+      alt: "Ethiopian Manuscript with Hand",
+      title: language === "en" ? "Traditional Reading Posture" : "ባህላዊ የንባብ አቀማመጥ",
       description:
         language === "en"
-          ? "Skilled artists add intricate decorative elements, colorful borders, and traditional Ethiopian patterns (harag) with vibrant colors and sacred symbolism."
-          : "ብቁ ሰዓሊዎች ውስብስብ ጌጣጌጦችን፣ ቀለማማ ድንበሮችን እና ደማቅ ቀለሞችና ቅዱስ ምልክቶችን ያካተቱ ባህላዊ የኢትዮጵያ ንድፎችን (ሐረግ) ይጨምራሉ።",
+          ? "A reader holding an Ethiopian manuscript showing the traditional way these sacred texts are handled and read."
+          : "እነዚህ ቅዱሳት ጽሑፎች በባህላዊ መንገድ እንዴት እንደሚያዙና እንደሚነበቡ የሚያሳይ የኢትዮጵያ ብራናን የያዘ አንባቢ።",
     },
     {
-      icon: <History className="h-6 w-6" />,
-      title: language === "en" ? "Binding & Finishing" : "ማሰርና ማጠናቀቅ",
+      src: "/images/manuscript-text.png",
+      alt: "Ge'ez Text Page",
+      title: language === "en" ? "Ancient Ge'ez Script" : "ጥንታዊ የግዕዝ ጽሑፍ",
       description:
         language === "en"
-          ? "Final assembly using ancient binding techniques to create durable, authentic manuscripts that will endure for generations."
-          : "ለብዙ ትውልዶች የሚቆዩ ጠንካራ እና ትክክለኛ መጻህፍትን ለመፍጠር ጥንታዊ የአሰራር ዘዴዎችን በመጠቀም የመጨረሻ ድምር።",
+          ? "A beautifully preserved page of Ge'ez text with colorful decorative headers, written in the traditional black and red ink."
+          : "በባህላዊ ጥቁርና ቀይ ቀለም የተጻፈ፣ ቀለማማ ጌጣጌጥ ራስጌዎችን ያለው በጥሩ ሁኔታ የተጠበቀ የግዕዝ ጽሑፍ ገጽ።",
+    },
+    {
+      src: "/images/manuscript-closed.png",
+      alt: "Bound Ethiopian Manuscript",
+      title: language === "en" ? "Traditional Binding" : "ባህላዊ አሰራር",
+      description:
+        language === "en"
+          ? "A traditionally bound Ethiopian manuscript with red leather cover, displayed on ceremonial cloth."
+          : "በቀይ ቆዳ ሽፋን የታሰረ ባህላዊ የኢትዮጵያ ብራና፣ በሥነ-ሥርዓት ጨርቅ ላይ የቀረበ።",
+    },
+    {
+      src: "/images/manuscript-open3.png",
+      alt: "Illuminated Ethiopian Manuscript",
+      title: language === "en" ? "Sacred Illumination" : "ቅዱስ ሐረግ",
+      description:
+        language === "en"
+          ? "An Ethiopian manuscript displaying vibrant illumination alongside traditional Ge'ez text, showcasing the artistic heritage preserved by Melad."
+          : "ደማቅ ሐረግን ከባህላዊ የግዕዝ ጽሑፍ ጎን ለጎን የሚያሳይ የኢትዮጵያ ብራና፣ በሜላድ የሚጠበቀውን የጥበብ ቅርስ የሚያሳይ።",
     },
   ]
 
+  const handlePrevious = () => {
+    if (selectedImage === null) return
+    setSelectedImage(selectedImage === 0 ? galleryItems.length - 1 : selectedImage - 1)
+  }
+
+  const handleNext = () => {
+    if (selectedImage === null) return
+    setSelectedImage(selectedImage === galleryItems.length - 1 ? 0 : selectedImage + 1)
+  }
+
   return (
-    <section className="w-full py-16 md:py-24 bg-slate-50 relative overflow-hidden">
+    <section className="w-full py-16 md:py-24 lg:py-32 bg-slate-50 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-full h-20 bg-gradient-to-b from-white to-transparent"></div>
+
       <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary/5"></div>
       <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-secondary/5"></div>
 
       <div className="container px-4 md:px-6 relative">
-        <div className="text-center mb-16">
-         
-          <motion.h2
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-4"
+            transition={{ duration: 0.5 }}
+            className="space-y-2"
           >
-            {language === "en" ? "The Art of Manuscript Creation" : "የብራና ጽሑፍ የሥራ ጥበብ"}
-          </motion.h2>
+           
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">{t("gallery")}</h2>
+            <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl">
+              {language === "en"
+                ? "Explore our collection of authentic Ethiopian manuscripts, created using traditional techniques passed down through generations."
+                : "ከትውልድ ወደ ትውልድ በተላለፉ ባህላዊ ቴክኒኮች የተሰሩ እውነተኛ የኢትዮጵያ ብራናዎች ስብስባችንን ይመልከቱ።"}
+            </p>
+          </motion.div>
 
-          <motion.p
+          {/* Gallery Grid */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 w-full max-w-5xl mt-8">
+            {galleryItems.map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group cursor-pointer"
+                onClick={() => setSelectedImage(index)}
+              >
+                <div className="relative aspect-square overflow-hidden rounded-lg manuscript-border">
+                  <Image
+                    src={item.src || "/placeholder.svg"}
+                    alt={item.alt}
+                    fill
+                    className="object-cover transition-transform hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                    <h3 className="text-lg font-bold text-white">{item.title}</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-2 text-white border-white/30 bg-white/10 hover:bg-white/20 w-fit"
+                    >
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      {language === "en" ? "View Details" : "ዝርዝር ይመልከቱ"}
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-4 text-slate-600 md:text-lg max-w-3xl mx-auto"
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-12 flex flex-col sm:flex-row gap-4 justify-center"
           >
-            {language === "en"
-              ? "Creating a traditional Ethiopian manuscript involves meticulous craftsmanship passed down through generations of artisans."
-              : "ባህላዊ የኢትዮጵያ ብራና መፍጠር ከትውልድ ወደ ትውልድ የተላለፈ ጥልቅ ጥበብ ይጠይቃል።"}
-          </motion.p>
+            <Link href="/manuscripts">
+              <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-8 shadow-md">
+                {language === "en" ? "View All Manuscripts" : "ሁሉንም ብራናዎች ይመልከቱ"}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
-<div className="grid md:grid-cols-2 gap-6 items-center">
-  <div className="order-2 md:order-1">
-    <div className="grid grid-cols-1 gap-3.5">
-      {processSteps.map((step, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, x: -10 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: index * 0.1 }}
-          className="flex items-start space-x-3.5 bg-white p-4 rounded-md shadow-xs hover:shadow-sm transition-all border border-gray-100"
-        >
-          <div className="flex-shrink-0 flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 text-primary text-[15px]">
-            {step.icon}
-          </div>
-          <div>
-            <h3 className="text-[16px] font-medium text-gray-800 mb-1.5 leading-tight">{step.title}</h3>
-            <p className="text-[15px] text-gray-600 leading-snug">{step.description}</p>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-
-  <motion.div
-    initial={{ opacity: 0, scale: 0.98 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.6 }}
-    className="relative order-1 md:order-2 w-full max-w-[320px] mx-auto"
-  >
-    {/* Main Image - Ensure this path is correct */}
-    <div className="relative aspect-[3/4] overflow-hidden rounded-lg shadow-sm border border-gray-200 bg-gray-100">
-      <Image
-        src="/images/manuscript-page.png" 
-        alt="Manuscript Creation Process"
-        width={390}
-        height={426}
-        className="object-cover object-center w-full h-full"
-        priority
-      />
-    </div>
-
-    {/* Floating Image */}
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="absolute -bottom-4 -right-4 h-20 w-20 rounded-md overflow-hidden border-2 border-white shadow-md animate-float"
-    >
-      <Image 
-        src="/images/manuscript-book2.png" // Changed to .jpg extension
-        alt="Finished Manuscript" 
-        width={80}
-        height={80}
-        className="object-cover object-center"
-        priority
-      />
-    </motion.div>
-  </motion.div>
-</div>
       </div>
+
+      {/* Image Modal */}
+      <Dialog open={selectedImage !== null} onOpenChange={(open) => !open && setSelectedImage(null)}>
+        <DialogContent className="max-w-5xl p-0 bg-transparent border-0 shadow-none">
+          {selectedImage !== null && (
+            <div className="relative bg-black/95 rounded-lg overflow-hidden">
+              <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-black/50 p-2 text-white hover:bg-black/70">
+                <X className="h-5 w-5" />
+              </DialogClose>
+              <button
+                onClick={handlePrevious}
+                className="absolute left-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white hover:bg-black/70"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="absolute right-4 top-1/2 z-50 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white hover:bg-black/70"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+
+              <div className="flex flex-col">
+                <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] w-full">
+                  <Image
+                    src={galleryItems[selectedImage].src || "/placeholder.svg"}
+                    alt={galleryItems[selectedImage].alt}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+
+                <div className="bg-black p-4 sm:p-6 text-white">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                      <h3 className="text-xl font-bold">{galleryItems[selectedImage].title}</h3>
+                      <p className="mt-2 text-white/90">{galleryItems[selectedImage].description}</p>
+                    </div>
+                    <Link href="/manuscripts">
+                      <Button className="rounded-full bg-primary hover:bg-primary/90 text-white">
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   )
 }

@@ -58,6 +58,7 @@ export default function ProductsPage() {
     { id: "restoration", label: language === "en" ? "Restoration" : "እድሳት", count: 4 },
     { id: "custom", label: language === "en" ? "Custom Orders" : "ልዩ ትዕዛዞች", count: 6 },
     { id: "educational", label: language === "en" ? "Educational" : "ትምህርታዊ", count: 3 },
+
   ]
 
   const products = [
@@ -329,7 +330,7 @@ const addToCart = async (productId: number, productName: string) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl"
+            className="text-4xl font-bold tracking-tighter text-white sm:text-5xl md:text-6xl max-w-4xl pb-2"
           >
             {language === "en" ? "Authentic Ethiopian Manuscripts & Art" : "እውነተኛ የኢትዮጵያ ብራናዎች እና ጥበብ"}
           </motion.h1>
@@ -349,11 +350,11 @@ const addToCart = async (productId: number, productName: string) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mt-8"
+            className="flex flex-col sm:flex-row gap-4 "
           >
             <Button
               variant="outline"
-              className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base shadow-lg"
+              className="h-12 px-8 bg-white text-primary hover:bg-white/10 rounded-full text-base shadow-lg mt-16"
               onClick={() => {
                 const element = document.getElementById("featured-products");
                 if (element) {
@@ -364,8 +365,8 @@ const addToCart = async (productId: number, productName: string) => {
               {language === "en" ? "Shop Now" : "አሁን ይግዙ"}
             </Button>
             <Button
-              variant="outline"
-              className="h-12 px-8 border-white/30  text-primary  hover:bg-white/10 rounded-full text-base"
+              variant="ghost"
+        className="h-12 px-8 text-white hover:bg-white/10 rounded-full text-base border border-white mt-16 "
             >
               {language === "en" ? "View Catalog" : "ካታሎግ ይመልከቱ"}
             </Button>
@@ -981,12 +982,7 @@ const addToCart = async (productId: number, productName: string) => {
                   {language === "en" ? "Request Custom Order" : "ልዩ ትዕዛዝ ይጠይቁ"}
                 </Button>
               </Link>
-              <Button
-                variant="outline"
-                className="h-12 px-8 border-white/30 text-primary hover:bg-white/10 rounded-full text-base"
-              >
-                {language === "en" ? "View Portfolio" : "ፖርትፎሊዮ ይመልከቱ"}
-              </Button>
+             
             </div>
           </div>
         </div>

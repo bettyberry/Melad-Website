@@ -28,7 +28,6 @@ export default function AboutPage() {
   const { t, language } = useLanguage()
   const [activeTab, setActiveTab] = useState("history")
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -49,8 +48,7 @@ export default function AboutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-9 mr-9">
-      {/* Hero Section */}
+<div className="w-screen bg-gradient-to-b from-slate-50 to-white ">
       <section className="relative h-screen min-h-[500px] w-full overflow-hidden">
   <div className="absolute inset-0">
     <div className="relative h-full w-full">
@@ -64,7 +62,7 @@ export default function AboutPage() {
       initial={{ opacity: 0, y: -15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl max-w-4xl"
+      className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl max-w-4xl mb-4  "
     >
       {language === "en" ? "Preserving Ethiopia's Sacred Manuscript Heritage" : "የኢትዮጵያን ቅዱስ የብራና ቅርስ መጠበቅ"}
     </motion.h1>
@@ -86,10 +84,10 @@ export default function AboutPage() {
       transition={{ duration: 0.5, delay: 0.3 }}
       className="flex flex-wrap gap-3 justify-center mt-6"
     >
-      <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-md text-sm py-4 px-6 h-auto">
+      <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-md text-sm py-4 px-6 h-auto mt-8">
         {language === "en" ? "Our Story" : "ታሪካችን"}
       </Button>
-      <Button className="rounded-full bg-gradient-primary hover:opacity-90 shadow-md text-sm py-4 px-6 h-auto">
+      <Button className="rounded-full bg-gradient-primary  shadow-md text-sm py-4 px-6 h-auto mt-8">
         {language === "en" ? "Meet Our Team" : "ቡድናችንን ያግኙ"}
       </Button>
     </motion.div>
@@ -336,7 +334,7 @@ export default function AboutPage() {
                 className="relative"
               >
                 <div className="flex items-center justify-center">
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center shadow-lg z-10">
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg z-10">
                     <Users className="h-6 w-6" />
                   </div>
                 </div>
@@ -378,7 +376,7 @@ export default function AboutPage() {
                 className="relative"
               >
                 <div className="flex items-center justify-center">
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center shadow-lg z-10">
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg z-10">
                     <MapPin className="h-6 w-6" />
                   </div>
                 </div>
@@ -418,7 +416,7 @@ export default function AboutPage() {
                 className="relative"
               >
                 <div className="flex items-center justify-center">
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-gold text-white flex items-center justify-center shadow-lg z-10">
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg z-10">
                     <Globe className="h-6 w-6" />
                   </div>
                 </div>
@@ -453,7 +451,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Team Section */}
       <section className="py-20 bg-white relative overflow-hidden">
         {/* Decorative background */}
         <div className="absolute inset-0 subtle-pattern opacity-50"></div>
@@ -518,7 +515,7 @@ export default function AboutPage() {
 
             <motion.div variants={itemVariants} className="group">
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 p-8 text-center shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute top-0 left-0 h-2 w-full bg-gradient-secondary"></div>
+                <div className="absolute top-0 left-0 h-2 w-full bg-primary"></div>
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-white transition-all duration-300">
                   <BookOpen className="h-10 w-10" />
                 </div>
@@ -535,7 +532,7 @@ export default function AboutPage() {
 
             <motion.div variants={itemVariants} className="group">
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 p-8 text-center shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute top-0 left-0 h-2 w-full bg-gradient-accent"></div>
+                <div className="absolute top-0 left-0 h-2 w-full bg-primary"></div>
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300">
                   <Brush className="h-10 w-10" />
                 </div>
@@ -548,7 +545,7 @@ export default function AboutPage() {
 
             <motion.div variants={itemVariants} className="group">
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 p-8 text-center shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute top-0 left-0 h-2 w-full bg-gradient-gold"></div>
+                <div className="absolute top-0 left-0 h-2 w-full bg-primary "></div>
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gold/10 text-gold/90 group-hover:bg-gold group-hover:text-white transition-all duration-300">
                   <Sparkles className="h-10 w-10" />
                 </div>
@@ -918,13 +915,7 @@ export default function AboutPage() {
             </Link>
 
             <Link href="/learn-more" className="w-full md:w-auto">
-              <Button
-                size="lg"
-                variant="outline"
-                className="rounded-full border-white text-primary hover:bg-white/10 text-base py-3 px-8 h-auto"
-              >
-                {language === "en" ? "Learn More" : "ተጨማሪ ይወቁ"}
-              </Button>
+              
             </Link>
           </motion.div>
         </div>

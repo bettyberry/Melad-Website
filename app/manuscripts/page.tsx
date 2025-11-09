@@ -211,8 +211,7 @@ export default function ManuscriptsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white ml-10 mr-10">
-      {/* Hero Section */}
+    <div className="min-h-screenb g-gradient-to-b from-slate-50 to-white ">
      <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden">
   <div className="absolute inset-0">
     <div className="relative h-full w-full">
@@ -263,7 +262,6 @@ export default function ManuscriptsPage() {
 
 
 
-      {/* Manuscript Gallery */}
       <section className="py-16 md:py-20 bg-slate-50">
   <div className="container px-4 md:px-6 mx-auto">
     <div className="text-center mb-14">
