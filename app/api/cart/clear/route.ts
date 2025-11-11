@@ -1,4 +1,4 @@
-// app/api/cart/remove/route.ts
+// app/api/cart/clear/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -11,27 +11,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { productId } = await request.json()
-
-    if (!productId) {
-      return NextResponse.json(
-        { error: 'Product ID is required' },
-        { status: 400 }
-      )
-    }
-
-    console.log('🗑️ Removing item from cart:', {
-      user: session.user.email,
-      productId
-    })
+    // Here you would clear the user's cart in your database
+    console.log('🗑️ Clearing cart for user:', session.user.email)
 
     return NextResponse.json({
       success: true,
-      message: 'Item removed from cart'
+      message: 'Cart cleared successfully'
     })
 
   } catch (error) {
-    console.error('Cart remove error:', error)
+    console.error('Cart clear error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

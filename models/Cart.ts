@@ -1,29 +1,50 @@
-import mongoose, { Schema, model, models, Document } from "mongoose"
+import mongoose from 'mongoose';
 
-interface CartItem {
-  productId: string
-  name: string
-  price: number
-  quantity: number
-}
+const cartItemSchema = new mongoose.Schema({
+  productId: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  image: {
+    type: String,
+    default: '',
+  },
+});
 
-interface CartDocument extends Document {
-  userId: string
-  items: CartItem[]
-}
+const cartSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  items: [cartItemSchema],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-const CartSchema = new Schema<CartDocument>({
-  userId: { type: String, required: true },
-  items: [
-    {
-      productId: String,
-      name: String,
-      price: Number,
-      quantity: Number,
-    },
-  ],
-})
+// Update the updatedAt field before saving
+cartSchema.pre('save', function(next) {
+  this.updatedAt = new Date();
+  next();
+});
 
-const Cart = models.Cart || model<CartDocument>("Cart", CartSchema)
-export default Cart
-export type { CartItem, CartDocument }
+export default mongoose.models.Cart || mongoose.model('Cart', cartSchema);

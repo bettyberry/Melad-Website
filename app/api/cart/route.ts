@@ -1,35 +1,55 @@
-import { NextRequest, NextResponse } from 'next/server'
-
-// Simple in-memory storage for demo - replace with your database
-let cartStorage: Record<string, { items: any[] }> = {}
-
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const userId = searchParams.get('userId')
-
-  if (!userId) {
-    return NextResponse.json({ error: 'User ID required' }, { status: 400 })
-  }
-
-  // Return user's cart or empty cart if not found
-  const userCart = cartStorage[userId] || { items: [] }
-  return NextResponse.json(userCart)
-}
+import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { connectDB } from "@/lib/mongodb"
+import Cart from "@/models/Cart"
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { userId, items } = body
-
-    if (!userId) {
-      return NextResponse.json({ error: 'User ID required' }, { status: 400 })
+    const session = await getServerSession(authOptions)
+    
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Save or update user's cart
-    cartStorage[userId] = { items: items || [] }
+    const { productId, quantity } = await request.json()
+    
+    if (!productId || quantity === undefined) {
+      return NextResponse.json({ error: "Product ID and quantity are required" }, { status: 400 })
+    }
 
-    return NextResponse.json({ success: true, items: items || [] })
+    if (quantity < 1) {
+      return NextResponse.json({ error: "Quantity must be at least 1" }, { status: 400 })
+    }
+
+    await connectDB()
+    
+    const cart = await Cart.findOne({ userId: session.user.email })
+
+    if (!cart) {
+      return NextResponse.json({ error: "Cart not found" }, { status: 404 })
+    }
+
+    const itemIndex = cart.items.findIndex(
+      (item: any) => item.productId === productId
+    )
+
+    if (itemIndex === -1) {
+      return NextResponse.json({ error: "Item not found in cart" }, { status: 404 })
+    }
+
+    cart.items[itemIndex].quantity = quantity
+    await cart.save()
+
+    return NextResponse.json({ 
+      success: true, 
+      message: "Cart updated successfully" 
+    })
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to save cart' }, { status: 500 })
+    console.error("❌ Update cart error:", error)
+    return NextResponse.json(
+      { error: "Failed to update cart" },
+      { status: 500 }
+    )
   }
 }

@@ -1,55 +1,43 @@
-import { NextResponse } from 'next/server';
-import connectToDatabase from '@/lib/mongodb';
-import CartItem from '@/models/CartItem';
+// app/api/cart/merge/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
-type CartItemInput = {
-  productId: string;
-  name?: string;
-  quantity: number;
-  price?: number;
-};
-
-type MergeBody = {
-  userId: string;
-  items: CartItemInput[]; // The items from localStorage
-};
-
-export async function POST(request: Request) {
-  await connectToDatabase();
-
+export async function POST(request: NextRequest) {
   try {
-    const { userId, items: localCartItems } = (await request.json()) as MergeBody;
+    const session = await getServerSession(authOptions)
 
-    if (!userId || !Array.isArray(localCartItems)) {
-      return NextResponse.json({ message: 'Invalid request data' }, { status: 400 });
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Prepare all merge operations
-    const operations = localCartItems.map(localItem => {
-      // Find the existing item or create a new one
-      return CartItem.findOneAndUpdate(
-        { userId, productId: localItem.productId },
-        {
-          $inc: { quantity: localItem.quantity },
-          $setOnInsert: {
-            name: localItem.name,
-            price: localItem.price,
-          },
-        },
-        {
-          upsert: true,
-          new: true,
-          runValidators: true,
-        }
-      );
-    });
+    const { userId, items } = await request.json()
 
-    await Promise.all(operations);
+    if (!items || !Array.isArray(items)) {
+      return NextResponse.json(
+        { error: 'Invalid items data' },
+        { status: 400 }
+      )
+    }
 
-    return NextResponse.json({ message: 'Cart merged successfully' }, { status: 200 });
+    const mergedItemsCount = items.reduce((sum: number, item: any) => sum + item.quantity, 0)
+
+    console.log('🔄 Cart merge completed:', {
+      user: userId,
+      mergedItems: mergedItemsCount
+    })
+
+    return NextResponse.json({
+      success: true,
+      mergedItemsCount: mergedItemsCount,
+      message: 'Cart merged successfully'
+    })
 
   } catch (error) {
-    console.error('Mongoose Error merging cart:', error);
-    return NextResponse.json({ message: 'Failed to merge cart' }, { status: 500 });
+    console.error('Cart merge error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

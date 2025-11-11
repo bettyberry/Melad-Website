@@ -31,6 +31,7 @@ type CartItem = {
   name?: string
   quantity: number
   price?: number
+  image?: string
 }
 
 export default function Header() {
@@ -61,8 +62,22 @@ export default function Header() {
     { key: "contact", href: "/contact" },
   ]
 
-  // Check if user is admin
-  const isAdmin = session?.user?.role === "admin" || session?.user?.email === "admin@example.com"
+  const isAdmin = session?.user?.role === "admin" || 
+                 session?.user?.email?.includes('admin') ||
+                 session?.user?.email === 'michaelkumsa@gmail.com' ||
+                 session?.user?.email?.toLowerCase() === 'michaelkumsa@gmail.com' ||
+                 session?.user?.name?.toLowerCase().includes('admin')
+
+  // Debug info
+  useEffect(() => {
+    if (session?.user) {
+      console.log(' User session:', session.user)
+      console.log(' Is admin:', isAdmin)
+      console.log(' User email:', session.user.email)
+      console.log(' User role:', session.user.role)
+      console.log(' User name:', session.user.name)
+    }
+  }, [session, isAdmin])
 
   useEffect(() => {
     setIsMounted(true)
@@ -71,83 +86,151 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  useEffect(() => {
-    const updateCartCount = async () => {
-      if (session?.user?.id) {
-        try {
-          const res = await fetch(`/api/cart/get?userId=${session.user.id}`)
-          if (res.ok) {
-            const data = await res.json()
-            setCartCount(data.items?.length || 0)
-          }
-        } catch (error) {
-          console.error("Failed to fetch cart:", error)
-          // Fallback to localStorage if API fails
-          const storedCart = localStorage.getItem("cartItems")
-          setCartCount(storedCart ? JSON.parse(storedCart).length : 0)
+
+// Improved cart count update in header.tsx
+useEffect(() => {
+  const updateCartCount = () => {
+    try {
+      console.log('🔄 Header: Updating cart count...')
+      
+      // Always check localStorage first for immediate response
+      const storedCart = localStorage.getItem("cartItems")
+      let count = 0
+      
+      if (storedCart) {
+        const items = JSON.parse(storedCart)
+        count = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0)
+        console.log('📦 Header: Local storage cart items:', items)
+      }
+      
+      console.log('✅ Header: Cart count updated to:', count)
+      setCartCount(count)
+      
+    } catch (error) {
+      console.error("❌ Header: Cart count update failed:", error)
+      setCartCount(0)
+    }
+  }
+
+  // Listen for cart updates
+  window.addEventListener("cartUpdated", updateCartCount)
+  
+  // Also listen for storage events (when localStorage changes in other tabs)
+  window.addEventListener("storage", updateCartCount)
+  
+  // Initial load
+  updateCartCount()
+
+  return () => {
+    window.removeEventListener("cartUpdated", updateCartCount)
+    window.removeEventListener("storage", updateCartCount)
+  }
+}, []) // Remove session dependency for now to simplify
+
+
+
+// Add this useEffect in the header component
+useEffect(() => {
+  const handleOpenLoginModal = () => {
+    setOpenAuth(true)
+    setIsSignup(false)
+    setAdminMode(false)
+  }
+
+  window.addEventListener('openLoginModal', handleOpenLoginModal)
+  
+  return () => {
+    window.removeEventListener('openLoginModal', handleOpenLoginModal)
+  }
+}, [])
+
+// Enhanced login cart merge
+useEffect(() => {
+  if (!session?.user?.email || status !== 'authenticated') return
+  
+  const handleUserLogin = async () => {
+    try {
+      const localCart: CartItem[] = JSON.parse(localStorage.getItem("cartItems") || "[]")
+      const mergeFlag = localStorage.getItem(`cartMerged_${session.user.email}`)
+      
+      console.log('🔐 User login detected:', {
+        user: session.user.email,
+        localCartItems: localCart.length,
+        hasMergeFlag: !!mergeFlag
+      })
+
+      // Only merge if we have local items and haven't merged yet
+      if (localCart.length > 0 && !mergeFlag) {
+        console.log('🔄 Starting automatic cart merge...')
+        
+        const response = await fetch("/api/cart/merge", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            userId: session.user.email, 
+            items: localCart 
+          }),
+        })
+        
+        const result = await response.json()
+        console.log('🔄 Merge API response:', { status: response.status, result })
+        
+        if (response.ok && result.success) {
+          console.log('✅ Cart merged successfully')
+          localStorage.removeItem("cartItems")
+          localStorage.setItem(`cartMerged_${session.user.email}`, 'true')
+          console.log('🗑️ Local cart cleared, merge flag set')
+          
+          // Update cart count
+          setCartCount(result.mergedItemsCount || 0)
+        } else {
+          console.error('❌ Failed to merge cart:', result.error)
         }
       } else {
-        const storedCart = localStorage.getItem("cartItems")
-        setCartCount(storedCart ? JSON.parse(storedCart).length : 0)
-      }
-    }
-
-    window.addEventListener("cartUpdated", updateCartCount)
-    updateCartCount()
-
-    return () => window.removeEventListener("cartUpdated", updateCartCount)
-  }, [session])
-
-  // Merge cart after login
-  useEffect(() => {
-    if (!session?.user?.id) return
-    
-    const mergeAndLoadCart = async () => {
-      const localCart: CartItem[] = JSON.parse(localStorage.getItem("cartItems") || "[]")
-      
-      if (localCart.length > 0) {
-        try {
-          await fetch("/api/cart/merge", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId: session.user.id, items: localCart }),
-          })
-          localStorage.removeItem("cartItems")
-        } catch (error) {
-          console.error("Failed to merge cart:", error)
-        }
+        console.log('ℹ️ No merge needed:', {
+          hasLocalItems: localCart.length > 0,
+          hasMergeFlag: !!mergeFlag
+        })
       }
       
-      // Update cart count after merge
+      // Always trigger cart update to load from database
       window.dispatchEvent(new Event("cartUpdated"))
+      
+    } catch (error) {
+      console.error("❌ Failed during user login cart merge:", error)
     }
+  }
 
-    mergeAndLoadCart()
-  }, [session])
+  const timer = setTimeout(() => {
+    handleUserLogin()
+  }, 1000)
 
+  return () => clearTimeout(timer)
+}, [session?.user?.email, status])
   const handleLogout = async () => {
     setIsLoggingOut(true)
     setUserMenuOpen(false)
     
     try {
-      // Clear local storage first
-      localStorage.removeItem("cartItems")
+      // Clear merge flags on logout
+      if (session?.user?.email) {
+        localStorage.removeItem(`cartMerged_${session.user.email}`);
+      }
       
-      // Sign out
+      // Don't clear cartItems on logout - keep them for guest mode
+      // localStorage.removeItem("cartItems")
+      
       await signOut({ 
         redirect: false,
         callbackUrl: "/"
       })
       
-      // Reset cart count
-      setCartCount(0)
+      // Reset cart count to local storage count
+      const storedCart = localStorage.getItem("cartItems")
+      setCartCount(storedCart ? JSON.parse(storedCart).length : 0)
       
-      // Force a refresh to update the session state
       router.refresh()
-      
-      // Navigate to home page
       router.push("/")
-      
     } catch (error) {
       console.error("Logout failed:", error)
     } finally {
@@ -196,55 +279,40 @@ export default function Header() {
     const password = form.password.value
 
     try {
-      // Simulate signup - replace with actual API call
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          password, 
+          role: email.toLowerCase().includes('admin') || email.toLowerCase() === 'michaelkumsa@gmail.com' ? 'admin' : 'user' 
+        }),
       })
 
       if (res.ok) {
         alert(`Account created for ${name}`)
         setIsSignup(false)
-        // Auto login after signup
         await signIn("credentials", { redirect: false, email, password })
         setOpenAuth(false)
         router.refresh()
       } else {
-        alert("Signup failed")
+        const errorData = await res.json()
+        alert(errorData.error || "Signup failed")
       }
     } catch (error) {
       alert("Signup failed")
     }
   }
 
-  // Add to cart helper
-  const addToCart = async (product: CartItem) => {
-    if (session?.user?.id) {
-      await fetch("/api/cart/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: session.user.id, product }),
-      })
-    } else {
-      const storedCart = localStorage.getItem("cartItems")
-      const cart: CartItem[] = storedCart ? JSON.parse(storedCart) : []
-
-      const existing = cart.find((i: CartItem) => i.productId === product.productId)
-      if (existing) {
-        existing.quantity += product.quantity
-      } else {
-        cart.push(product)
-      }
-
-      localStorage.setItem("cartItems", JSON.stringify(cart))
-    }
-    window.dispatchEvent(new Event("cartUpdated"))
+  // Add image error handlers
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.target as HTMLImageElement
+    target.style.display = 'none'
   }
 
   if (!isMounted) return null
 
-  // Show loading state during logout
   if (isLoggingOut) {
     return (
       <header className="fixed top-0 z-50 w-full bg-white/95 backdrop-blur-md shadow-sm py-1">
@@ -281,6 +349,8 @@ export default function Header() {
               alt="Logo"
               fill
               className="object-cover"
+              onError={handleImageError}
+              priority
             />
           </div>
 
@@ -357,8 +427,8 @@ export default function Header() {
               href="/admin/dashboard"
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 flex items-center ${
                 pathname?.startsWith("/admin")
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                  ? "bg-blue-100 text-blue-700 border border-blue-200"
+                  : "text-blue-600 hover:bg-blue-50 hover:text-blue-700 border border-transparent"
               }`}
             >
               <LayoutDashboard className="h-3.5 w-3.5 mr-1" />
@@ -435,7 +505,7 @@ export default function Header() {
                   transition={{ type: "spring", stiffness: 500, damping: 20 }}
                   className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white text-[10px] font-medium"
                 >
-                  {cartCount}
+                  {cartCount > 99 ? '99+' : cartCount}
                 </motion.span>
               )}
             </Link>
@@ -446,17 +516,19 @@ export default function Header() {
             <div className="relative flex items-center space-x-2">
               {/* User Avatar */}
               <div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-200">
-                <Image
-                  src={session.user.image || "/images/default-avatar.png"}
-                  alt="User"
-                  fill
-                  className="object-cover"
-                />
+  <Image
+  src="/images/default-avatar.png"
+  alt="Default Avatar"
+  width={50}
+  height={50}
+/>
+
               </div>
 
               {/* User Name - Displayed when logged in */}
               <span className="hidden sm:block text-sm font-medium text-gray-800">
                 {session.user.name?.split(" ")[0] || "User"}
+                {isAdmin && " (Admin)"}
               </span>
 
               {/* Dropdown Button */}
@@ -479,16 +551,17 @@ export default function Header() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 top-full mt-2 w-44 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+                    className="absolute right-0 top-full mt-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50"
                   >
-                    {/* Admin Dashboard in dropdown for mobile */}
+                    {/* Admin Dashboard in dropdown */}
                     {isAdmin && (
                       <Link 
                         href="/admin/dashboard" 
-                        className="flex items-center px-3 py-2 text-sm hover:bg-gray-50 text-blue-600"
+                        className="flex items-center px-3 py-2 text-sm hover:bg-blue-50 text-blue-600 font-medium border-b border-gray-100"
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        <LayoutDashboard className="h-4 w-4 mr-2" /> Dashboard
+                        <LayoutDashboard className="h-4 w-4 mr-2" /> 
+                        Admin Dashboard
                       </Link>
                     )}
                     <Link 
@@ -514,7 +587,7 @@ export default function Header() {
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center w-full text-left px-3 py-2 text-sm hover:bg-gray-50 text-gray-700"
+                      className="flex items-center w-full text-left px-3 py-2 text-sm hover:bg-gray-50 text-gray-700 border-t border-gray-100"
                       disabled={isLoggingOut}
                     >
                       <LogOut className="h-4 w-4 mr-2" /> 

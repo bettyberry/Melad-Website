@@ -1,18 +1,16 @@
-// components/providers.tsx
-"use client"
+"use client";
 
-import { SessionProvider } from "next-auth/react"
-import { ThemeProvider } from "@/components/theme-provider"
-import { LanguageProvider } from "@/components/language-provider"
+import { ReactNode } from "react";
+import { SessionProvider } from "next-auth/react";
+import { CartProvider } from "@/contexts/cart-context";
+import { LanguageProvider } from "@/components/language-provider";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
-      </ThemeProvider>
+      <LanguageProvider>
+        <CartProvider>{children}</CartProvider>
+      </LanguageProvider>
     </SessionProvider>
-  )
+  );
 }

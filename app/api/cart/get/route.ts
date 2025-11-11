@@ -1,12 +1,29 @@
-import { NextRequest, NextResponse } from "next/server"
-import dbConnect from "@/lib/mongodb"
-import Cart from "@/models/Cart"
+// app/api/cart/get/route.ts
+import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
-export async function GET(req: NextRequest) {
-  const userId = req.nextUrl.searchParams.get("userId")
-  if (!userId) return NextResponse.json({ items: [] })
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions)
 
-  await dbConnect()
-  const cart = await Cart.findOne({ userId })
-  return NextResponse.json({ items: cart?.items || [] })
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    return NextResponse.json({ 
+      items: [],
+      message: 'Cart fetched successfully'
+    })
+
+  } catch (error) {
+    console.error('Cart fetch error:', error)
+    return NextResponse.json(
+      { 
+        items: [],
+        error: 'Failed to fetch cart'
+      },
+      { status: 200 } 
+    )
+  }
 }

@@ -1,55 +1,77 @@
-// app/api/auth/signup/route.ts
-import { NextRequest, NextResponse } from "next/server"
-import { createUser, findUserByEmail, hashPassword } from "@/models/User"
+import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import { connectDB } from "@/lib/mongodb";
+import User from "@/models/User";
+import { Types } from 'mongoose';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const { name, email, password } = await req.json()
+    await connectDB();
+    
+    const { name, email, password } = await req.json();
 
     // Validate input
     if (!name || !email || !password) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "All fields are required" },
         { status: 400 }
-      )
+      );
     }
 
     if (password.length < 6) {
       return NextResponse.json(
         { error: "Password must be at least 6 characters" },
         { status: 400 }
-      )
+      );
     }
 
     // Check if user already exists
-    const existingUser = await findUserByEmail(email)
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return NextResponse.json(
         { error: "User already exists with this email" },
         { status: 409 }
-      )
+      );
     }
 
     // Hash password
-    const hashedPassword = await hashPassword(password)
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Determine role
+    const isAdmin = email.toLowerCase().includes('admin') || 
+                   email.toLowerCase() === 'michaelkumsa@gmail.com';
 
     // Create user
-    const user = await createUser({
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
       password: hashedPassword,
-      role: "user"
-    })
+      role: isAdmin ? 'admin' : 'user',
+    });
 
-    // Return user without password
-    const { password: _, ...userWithoutPassword } = user
-    return NextResponse.json(userWithoutPassword, { status: 201 })
-    
-  } catch (error) {
-    console.error("Signup error:", error)
+    // Remove password from response with proper typing
+    const userWithoutPassword = {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      image: user.image,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
     return NextResponse.json(
-      { error: "Internal server error" },
+      { 
+        message: "User created successfully", 
+        user: userWithoutPassword 
+      },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    console.error("Signup error:", error);
+    return NextResponse.json(
+      { error: "Internal server error", details: error.message },
       { status: 500 }
-    )
+    );
   }
 }
