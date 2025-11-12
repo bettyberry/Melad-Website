@@ -89,43 +89,58 @@ export default function Header() {
 
 // Improved cart count update in header.tsx
 useEffect(() => {
-  const updateCartCount = () => {
+  const updateCartCount = async () => {
     try {
       console.log('🔄 Header: Updating cart count...')
-      
-      // Always check localStorage first for immediate response
-      const storedCart = localStorage.getItem("cartItems")
+
+      // If user is authenticated, fetch cart from API for an authoritative count
+      if (session?.user?.email) {
+        try {
+          const res = await fetch('/api/cart/get')
+          if (res.ok) {
+            const data = await res.json()
+            const items = data.items || []
+            const count = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0)
+            console.log('📦 Header: Server cart items:', items)
+            setCartCount(count)
+            return
+          }
+        } catch (err) {
+          console.error('❌ Header: Failed to fetch server cart, falling back to localStorage', err)
+        }
+      }
+
+      // Fallback to localStorage for guests or on error
+      const storedCart = localStorage.getItem('cartItems')
       let count = 0
-      
       if (storedCart) {
         const items = JSON.parse(storedCart)
         count = items.reduce((sum: number, item: any) => sum + (item.quantity || 0), 0)
         console.log('📦 Header: Local storage cart items:', items)
       }
-      
       console.log('✅ Header: Cart count updated to:', count)
       setCartCount(count)
-      
+
     } catch (error) {
-      console.error("❌ Header: Cart count update failed:", error)
+      console.error('❌ Header: Cart count update failed:', error)
       setCartCount(0)
     }
   }
 
   // Listen for cart updates
-  window.addEventListener("cartUpdated", updateCartCount)
-  
+  window.addEventListener('cartUpdated', updateCartCount)
+
   // Also listen for storage events (when localStorage changes in other tabs)
-  window.addEventListener("storage", updateCartCount)
-  
+  window.addEventListener('storage', updateCartCount)
+
   // Initial load
   updateCartCount()
 
   return () => {
-    window.removeEventListener("cartUpdated", updateCartCount)
-    window.removeEventListener("storage", updateCartCount)
+    window.removeEventListener('cartUpdated', updateCartCount)
+    window.removeEventListener('storage', updateCartCount)
   }
-}, []) // Remove session dependency for now to simplify
+}, [session])
 
 
 

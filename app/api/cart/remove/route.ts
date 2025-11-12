@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import connectDB from '@/lib/mongodb'
+import Cart from '@/models/Cart'
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,14 +22,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('🗑️ Removing item from cart:', {
-      user: session.user.email,
-      productId
-    })
+    await connectDB()
+    const userId = session.user.email
+    const cart = await Cart.findOne({ userId })
+    if (cart) {
+      cart.items = cart.items.filter((i: any) => i.productId !== productId)
+      await cart.save()
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Item removed from cart'
+      message: 'Item removed from cart',
+      items: cart ? cart.items : []
     })
 
   } catch (error) {

@@ -1,30 +1,46 @@
+// app/checkout/page.tsx
 "use client"
 
-import * as React from "react"
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
-import { Check } from "lucide-react"
+import { useCart } from "@/contexts/cart-context"
+import { useSession } from "next-auth/react"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
-import { cn } from "@/lib/utils"
+export default function CheckoutPage() {
+  const { state } = useCart()
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
-const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <CheckboxPrimitive.Root
-    ref={ref}
-    className={cn(
-      "peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
-      className
-    )}
-    {...props}
-  >
-    <CheckboxPrimitive.Indicator
-      className={cn("flex items-center justify-center text-current")}
-    >
-      <Check className="h-4 w-4" />
-    </CheckboxPrimitive.Indicator>
-  </CheckboxPrimitive.Root>
-))
-Checkbox.displayName = CheckboxPrimitive.Root.displayName
+  useEffect(() => {
+    // Redirect to login if not authenticated
+    if (status === 'unauthenticated') {
+      router.push('/auth/login?redirect=/checkout')
+      return
+    }
 
-export { Checkbox }
+    // Redirect if cart is empty
+    if (state.items.length === 0 && status === 'authenticated') {
+      router.push('/cart')
+      return
+    }
+  }, [session, status, state.items.length, router])
+
+  if (status === 'loading') {
+    return <div>Loading...</div>
+  }
+
+  if (!session) {
+    return <div>Redirecting to login...</div>
+  }
+
+  if (state.items.length === 0) {
+    return <div>Redirecting to cart...</div>
+  }
+
+  return (
+    <div className="checkout-page">
+      <h1>Checkout</h1>
+      {/* Checkout form */}
+    </div>
+  )
+}

@@ -1,78 +1,60 @@
 // contexts/cart-context.tsx
 "use client"
 
-import React, { createContext, useContext, useReducer, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import React, { createContext, useContext, useEffect, useReducer } from "react"
+import { useSession } from "next-auth/react"
 
 interface CartItem {
-  _id: string; // unique for each cart entry
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
+  productId: string
+  name: string
+  price: number
+  quantity: number
+  image?: string
 }
-
 
 interface CartState {
   items: CartItem[]
   loading: boolean
 }
 
-interface CartContextType {
-  state: CartState
-  addItem: (item: CartItem) => Promise<void>
-  updateQuantity: (productId: string, quantity: number) => Promise<void>
-  removeItem: (productId: string) => Promise<void>
-  clearCart: () => Promise<void>
-  refreshCart: () => Promise<void>
-}
+type Action =
+  | { type: "SET_ITEMS"; payload: CartItem[] }
+  | { type: "ADD_ITEM"; payload: CartItem }
+  | { type: "UPDATE_QUANTITY"; payload: { productId: string; quantity: number } }
+  | { type: "REMOVE_ITEM"; payload: string }
+  | { type: "CLEAR_CART" }
 
-const CartContext = createContext<CartContextType | undefined>(undefined)
+const CartContext = createContext<any>(null)
 
-// Cart actions
-type CartAction =
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ITEMS'; payload: CartItem[] }
-  | { type: 'ADD_ITEM'; payload: CartItem }
-  | { type: 'UPDATE_QUANTITY'; payload: { productId: string; quantity: number } }
-  | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'CLEAR_CART' }
-
-function cartReducer(state: CartState, action: CartAction): CartState {
+function reducer(state: CartState, action: Action): CartState {
   switch (action.type) {
-    case 'SET_LOADING':
-      return { ...state, loading: action.payload }
-    case 'SET_ITEMS':
-      return { ...state, items: action.payload, loading: false }
-    case 'ADD_ITEM':
-      const existingItem = state.items.find(item => item.productId === action.payload.productId)
-      if (existingItem) {
+    case "SET_ITEMS": return { ...state, items: action.payload, loading: false }
+    case "ADD_ITEM": {
+      const exists = state.items.find(i => i.productId === action.payload.productId)
+      if (exists) {
         return {
           ...state,
-          items: state.items.map(item =>
-            item.productId === action.payload.productId
-              ? { ...item, quantity: item.quantity + action.payload.quantity }
-              : item
+          items: state.items.map(i =>
+            i.productId === action.payload.productId
+              ? { ...i, quantity: i.quantity + action.payload.quantity }
+              : i
           )
         }
       }
       return { ...state, items: [...state.items, action.payload] }
-    case 'UPDATE_QUANTITY':
+    }
+    case "UPDATE_QUANTITY":
       return {
         ...state,
-        items: state.items.map(item =>
-          item.productId === action.payload.productId
-            ? { ...item, quantity: action.payload.quantity }
-            : item
-        ).filter(item => item.quantity > 0)
+        items: state.items.map(i =>
+          i.productId === action.payload.productId
+            ? { ...i, quantity: action.payload.quantity }
+            : i
+        ),
       }
-    case 'REMOVE_ITEM':
-      return {
-        ...state,
-        items: state.items.filter(item => item.productId !== action.payload)
-      }
-    case 'CLEAR_CART':
+    case "REMOVE_ITEM":
+      return { ...state, items: state.items.filter(i => i.productId !== action.payload) }
+    case "CLEAR_CART":
       return { ...state, items: [] }
     default:
       return state
@@ -80,166 +62,161 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, {
-    items: [],
-    loading: true
-  })
   const { data: session } = useSession()
+  const [state, dispatch] = useReducer(reducer, { items: [], loading: true })
 
-  // Load cart on initial render
+  // Load from API or localStorage
   useEffect(() => {
-    refreshCart()
+    async function loadCart() {
+      if (session?.user?.email) {
+        try {
+          const res = await fetch("/api/cart/get")
+          if (res.ok) {
+            const data = await res.json()
+            dispatch({ type: "SET_ITEMS", payload: data.items || [] })
+          } else {
+            dispatch({ type: "SET_ITEMS", payload: [] })
+          }
+        } catch (err) {
+          console.error('Failed to load cart from API, falling back to localStorage', err)
+          const stored = localStorage.getItem("cartItems")
+          dispatch({ type: "SET_ITEMS", payload: stored ? JSON.parse(stored) : [] })
+        }
+      } else {
+        const stored = localStorage.getItem("cartItems")
+        dispatch({ type: "SET_ITEMS", payload: stored ? JSON.parse(stored) : [] })
+      }
+    }
+    loadCart()
   }, [session])
 
-  const refreshCart = async () => {
-    dispatch({ type: 'SET_LOADING', payload: true })
-    try {
-      let items: CartItem[] = []
-      
-      if (session?.user?.email) {
-        // Fetch from API for logged-in users
-        const res = await fetch('/api/cart/get')
+  // Save to localStorage for guests
+  useEffect(() => {
+    if (!session?.user?.email) {
+      localStorage.setItem("cartItems", JSON.stringify(state.items))
+      window.dispatchEvent(new Event("cartUpdated"))
+    }
+  }, [state.items, session])
+
+  const addItem = async (product: CartItem) => {
+    // Optimistically update UI
+    dispatch({ type: "ADD_ITEM", payload: product })
+    if (session?.user?.email) {
+      try {
+        const res = await fetch("/api/cart/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...product }),
+        })
         if (res.ok) {
           const data = await res.json()
-          items = data.items || []
-        }
-      } else {
-        // Get from localStorage for guests
-        const stored = localStorage.getItem('cartItems')
-        items = stored ? JSON.parse(stored) : []
-      }
-      
-      dispatch({ type: 'SET_ITEMS', payload: items })
-      
-      // Trigger cart update event for header
-      window.dispatchEvent(new Event('cartUpdated'))
-    } catch (error) {
-      console.error('Failed to refresh cart:', error)
-      dispatch({ type: 'SET_LOADING', payload: false })
-    }
-  }
-
-  const addItem = async (item: CartItem) => {
-    try {
-      dispatch({ type: 'ADD_ITEM', payload: item })
-      
-      if (session?.user?.email) {
-        // Sync with API for logged-in users
-        await fetch('/api/cart/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(item)
-        })
-      } else {
-        // Update localStorage for guests
-        const currentItems = state.items
-        const existingItem = currentItems.find(i => i.productId === item.productId)
-        let newItems: CartItem[]
-        
-        if (existingItem) {
-          newItems = currentItems.map(i =>
-            i.productId === item.productId
-              ? { ...i, quantity: i.quantity + item.quantity }
-              : i
-          )
+          if (data.items) dispatch({ type: "SET_ITEMS", payload: data.items })
         } else {
-          newItems = [...currentItems, item]
+          // Robust logging: read raw text first (avoids clone/parsing oddities), try parse JSON, include headers
+          let rawText: string | null = null
+          try {
+            rawText = await res.text()
+          } catch (e) {
+            rawText = null
+          }
+
+          let parsedBody: any = null
+          if (rawText) {
+            try {
+              parsedBody = JSON.parse(rawText)
+            } catch (e) {
+              parsedBody = null
+            }
+          }
+
+          // Build a plain serializable snapshot so the console shows the state at log time
+          let headersObj: Record<string, string> = {}
+          try {
+            // headers.entries() is iterable of [k,v]
+            headersObj = Object.fromEntries(typeof res.headers?.entries === 'function' ? res.headers.entries() : [])
+          } catch (e) {
+            headersObj = {}
+          }
+
+          const snapshot = {
+            status: res.status,
+            statusText: res.statusText,
+            headers: headersObj,
+            body: parsedBody ?? rawText,
+          }
+
+          // Stringify snapshot so the console receives a frozen copy (avoids live object mutation/display issues)
+          try {
+            console.error('addItem failed, server response:', JSON.stringify(snapshot, null, 2))
+          } catch (e) {
+            console.error('addItem failed, server response (unserializable):', snapshot)
+          }
+
+          // Also emit raw body separately for quick inspection
+          if (rawText) console.error('addItem raw response body:', rawText)
         }
-        
-        localStorage.setItem('cartItems', JSON.stringify(newItems))
+      } catch (err) {
+        console.error('Failed to sync addItem with server', err)
       }
-      
-      // Trigger cart update event
-      window.dispatchEvent(new Event('cartUpdated'))
-    } catch (error) {
-      console.error('Failed to add item:', error)
-      // Revert on error
-      await refreshCart()
     }
+    window.dispatchEvent(new Event("cartUpdated"))
   }
 
   const updateQuantity = async (productId: string, quantity: number) => {
-    try {
-      dispatch({ type: 'UPDATE_QUANTITY', payload: { productId, quantity } })
-      
-      if (session?.user?.email) {
-        await fetch('/api/cart/update', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ productId, quantity })
+    dispatch({ type: "UPDATE_QUANTITY", payload: { productId, quantity } })
+    if (session?.user?.email) {
+      try {
+        const res = await fetch("/api/cart/update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId, quantity }),
         })
-      } else {
-        const currentItems = state.items
-        const newItems = currentItems
-          .map(item => item.productId === productId ? { ...item, quantity } : item)
-          .filter(item => item.quantity > 0)
-        localStorage.setItem('cartItems', JSON.stringify(newItems))
+        if (res.ok) {
+          const data = await res.json()
+          if (data.cart) dispatch({ type: "SET_ITEMS", payload: data.cart.items || [] })
+        }
+      } catch (err) {
+        console.error('Failed to sync updateQuantity with server', err)
       }
-      
-      window.dispatchEvent(new Event('cartUpdated'))
-    } catch (error) {
-      console.error('Failed to update quantity:', error)
-      await refreshCart()
     }
+    window.dispatchEvent(new Event("cartUpdated"))
   }
 
   const removeItem = async (productId: string) => {
-    try {
-      dispatch({ type: 'REMOVE_ITEM', payload: productId })
-      
-      if (session?.user?.email) {
-        await fetch('/api/cart/remove', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ productId })
+    dispatch({ type: "REMOVE_ITEM", payload: productId })
+    if (session?.user?.email) {
+      try {
+        const res = await fetch("/api/cart/remove", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId }),
         })
-      } else {
-        const newItems = state.items.filter(item => item.productId !== productId)
-        localStorage.setItem('cartItems', JSON.stringify(newItems))
+        if (res.ok) {
+          const data = await res.json()
+          if (data.items) dispatch({ type: "SET_ITEMS", payload: data.items })
+        }
+      } catch (err) {
+        console.error('Failed to sync removeItem with server', err)
       }
-      
-      window.dispatchEvent(new Event('cartUpdated'))
-    } catch (error) {
-      console.error('Failed to remove item:', error)
-      await refreshCart()
     }
+    window.dispatchEvent(new Event("cartUpdated"))
   }
 
   const clearCart = async () => {
-    try {
-      dispatch({ type: 'CLEAR_CART' })
-      
-      if (session?.user?.email) {
-        await fetch('/api/cart/clear', { method: 'POST' })
-      } else {
-        localStorage.removeItem('cartItems')
-      }
-      
-      window.dispatchEvent(new Event('cartUpdated'))
-    } catch (error) {
-      console.error('Failed to clear cart:', error)
-      await refreshCart()
+    dispatch({ type: "CLEAR_CART" })
+    if (session?.user?.email) {
+      await fetch("/api/cart/clear", { method: "DELETE" })
+    } else {
+      localStorage.removeItem("cartItems")
     }
+    window.dispatchEvent(new Event("cartUpdated"))
   }
 
   return (
-    <CartContext.Provider value={{
-      state,
-      addItem,
-      updateQuantity,
-      removeItem,
-      clearCart,
-      refreshCart
-    }}>
+    <CartContext.Provider value={{ state, addItem, updateQuantity, removeItem, clearCart }}>
       {children}
     </CartContext.Provider>
   )
 }
 
-export function useCart() {
-  const context = useContext(CartContext)
-  if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider')
-  }
-  return context
-}
+export const useCart = () => useContext(CartContext)

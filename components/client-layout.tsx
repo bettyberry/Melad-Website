@@ -1,8 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Header from "./header"
-import Footer from "./footer"
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false)
@@ -15,20 +13,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     return (
       <div className="min-h-screen bg-background">
         <div className="flex flex-col min-h-screen">
-          {/* Header skeleton */}
-          <header className="fixed top-0 z-50 w-full bg-white/95 backdrop-blur-md shadow-sm py-1">
-            <div className="container flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-12 h-12 bg-gray-200 animate-pulse rounded-full"></div>
-                <div className="hidden sm:block">
-                  <div className="w-32 h-4 bg-gray-200 animate-pulse rounded"></div>
-                  <div className="w-24 h-3 bg-gray-200 animate-pulse rounded mt-1"></div>
-                </div>
-              </div>
-            </div>
-          </header>
-          
-          {/* Main content skeleton */}
+          {/* Content skeleton while client mounts */}
           <main className="flex-1 pt-20">
             <div className="container mx-auto px-4">
               <div className="animate-pulse">
@@ -46,11 +31,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <div className="min-h-screen bg-background">
       <div className="flex flex-col min-h-screen">
-        <Header />
         <main className="flex-1 pt-16">
           {children}
         </main>
-        <Footer />
+        {/* Footer is rendered by the root layout to avoid duplication */}
       </div>
     </div>
   )

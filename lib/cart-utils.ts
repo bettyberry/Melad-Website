@@ -39,17 +39,11 @@ export const addToCart = async (product: any, quantity: number = 1, session: any
 
 const addToLocalCart = (newItem: any) => {
   const existingCart = JSON.parse(localStorage.getItem('cartItems') || '[]')
-  
-  // Check if item already exists
-  const existingItemIndex = existingCart.findIndex(
-    (item: any) => item.productId === newItem.productId
-  )
+  const existingItemIndex = existingCart.findIndex((item: any) => item.productId === newItem.productId)
 
   if (existingItemIndex > -1) {
-    // Update quantity
     existingCart[existingItemIndex].quantity += newItem.quantity
   } else {
-    // Add new item
     existingCart.push(newItem)
   }
 

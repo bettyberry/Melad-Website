@@ -208,10 +208,10 @@ export default function CheckoutPage() {
 
       const result = await response.json()
 
-      if (response.ok) {
+        if (response.ok) {
         // Clear cart
         if (session?.user?.email) {
-          await fetch('/api/cart/clear', { method: 'POST' })
+          await fetch('/api/cart/clear', { method: 'DELETE' })
         } else {
           localStorage.setItem('cartItems', JSON.stringify([]))
         }

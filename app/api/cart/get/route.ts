@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import connectDB from '@/lib/mongodb'
+import Cart from '@/models/Cart'
 
 export async function GET() {
   try {
@@ -11,8 +13,13 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    await connectDB()
+
+    const userId = session.user.email
+    const cart = await Cart.findOne({ userId })
+
     return NextResponse.json({ 
-      items: [],
+      items: cart?.items || [],
       message: 'Cart fetched successfully'
     })
 
@@ -23,7 +30,7 @@ export async function GET() {
         items: [],
         error: 'Failed to fetch cart'
       },
-      { status: 200 } 
+      { status: 500 } 
     )
   }
 }

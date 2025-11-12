@@ -3,6 +3,7 @@
 
 import { useLanguage } from "@/components/language-provider"
 import { useCart } from "@/contexts/cart-context"
+import type { CartItem } from '@/types/cart'
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -35,17 +36,46 @@ export default function CartPage() {
     }
   }
 
-  const handleProceedToCheckout = () => {
+  const handleProceedToCheckout = async () => {
     if (!session) {
       setShowLoginPrompt(true)
       return
     }
-    // If user is logged in, proceed to checkout
+
+    // If user is logged in, first merge any local guest cart into the server cart
+    try {
+      const localItems = JSON.parse(localStorage.getItem('cartItems') || '[]')
+      if (Array.isArray(localItems) && localItems.length > 0) {
+        try {
+          const res = await fetch('/api/cart/merge', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: localItems })
+          })
+
+          if (res.ok) {
+            // clear guest storage after successful merge
+            localStorage.setItem('cartItems', JSON.stringify([]))
+            // notify other listeners
+            window.dispatchEvent(new Event('cartUpdated'))
+          } else {
+            const err = await res.json().catch(() => ({}))
+            console.warn('Cart merge failed before checkout:', err)
+          }
+        } catch (err) {
+          console.error('Failed to merge local cart before checkout', err)
+        }
+      }
+    } catch (err) {
+      console.error('Error reading local cart before checkout', err)
+    }
+
+    // Proceed to checkout
     window.location.href = "/checkout"
   }
 
-  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
+  const total = items.reduce((sum: number, item: CartItem) => sum + (item.price * item.quantity), 0)
+  const itemCount = items.reduce((sum: number, item: CartItem) => sum + item.quantity, 0)
 
   if (loading) {
     return (
@@ -122,8 +152,8 @@ export default function CartPage() {
                   </span>
                 </div>
                 
-                {items.map(item => (
-                  <div key={item.productId} className="flex items-center space-x-4 py-4 border-b border-gray-200 last:border-b-0">
+                {items.map((item: CartItem, idx: number) => (
+                  <div key={`${item.productId}-${idx}`} className="flex items-center space-x-4 py-4 border-b border-gray-200 last:border-b-0">
                     <div className="relative h-20 w-20 flex-shrink-0">
                       <Image
   src={item.image || "/images/placeholder-product.jpg"}
@@ -194,8 +224,8 @@ export default function CartPage() {
                 </h2>
                 
                 <div className="space-y-2 mb-4">
-                  {items.map(item => (
-                    <div key={item.productId} className="flex justify-between text-sm">
+                  {items.map((item: CartItem, idx: number) => (
+                    <div key={`${item.productId}-${idx}`} className="flex justify-between text-sm">
                       <span className="text-gray-600 truncate flex-1 mr-2">
                         {item.name} × {item.quantity}
                       </span>
