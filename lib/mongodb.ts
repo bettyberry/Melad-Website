@@ -37,9 +37,6 @@ export async function connectDB() {
 
     const opts = {
       bufferCommands: false,
-      // useNewUrlParser and useUnifiedTopology are defaults in newer mongoose, but explicit is fine
-      useNewUrlParser: true as any,
-      useUnifiedTopology: true as any,
       autoIndex: false as any,
     };
 

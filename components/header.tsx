@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname, useRouter } from "next/navigation"
@@ -635,6 +636,9 @@ useEffect(() => {
             <DialogTitle className="text-center text-lg font-semibold text-gray-800">
               {isSignup ? "Create Your Account" : adminMode ? "Admin Login" : "Welcome Back"}
             </DialogTitle>
+            <DialogDescription className="text-center text-xs text-gray-500">
+              {isSignup ? "Sign up to start ordering authentic manuscripts" : "Sign in to access your account"}
+            </DialogDescription>
           </DialogHeader>
 
           {!isSignup ? (

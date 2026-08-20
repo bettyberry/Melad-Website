@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 import { ArrowRight, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogClose, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 
 export default function GallerySection() {
@@ -157,6 +157,10 @@ export default function GallerySection() {
       {/* Image Modal */}
       <Dialog open={selectedImage !== null} onOpenChange={(open) => !open && setSelectedImage(null)}>
         <DialogContent className="max-w-5xl p-0 bg-transparent border-0 shadow-none">
+          <DialogHeader className="sr-only">
+            <DialogTitle>{selectedImage !== null ? galleryItems[selectedImage].title : "Gallery Image"}</DialogTitle>
+            <DialogDescription>{selectedImage !== null ? galleryItems[selectedImage].description : "Image detail view"}</DialogDescription>
+          </DialogHeader>
           {selectedImage !== null && (
             <div className="relative bg-black/95 rounded-lg overflow-hidden">
               <DialogClose className="absolute right-4 top-4 z-50 rounded-full bg-black/50 p-2 text-white hover:bg-black/70">

@@ -41,7 +41,6 @@ const cartSchema = new mongoose.Schema({
   },
 });
 
-// Update the updatedAt field before saving
 cartSchema.pre('save', function(next) {
   this.updatedAt = new Date();
   next();
