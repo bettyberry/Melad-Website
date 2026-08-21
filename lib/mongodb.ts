@@ -30,14 +30,13 @@ export async function connectDB() {
   }
 
   if (!cached.promise) {
-    // Prevent Mongoose from creating indexes automatically at runtime.
-    // In development this can cause race conditions / duplicate-key errors
-    // if existing documents contain duplicate/NULL values for unique fields.
+    
     mongoose.set('autoIndex', false)
 
     const opts = {
       bufferCommands: false,
       autoIndex: false as any,
+      serverSelectionTimeoutMS: 5000,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
